@@ -1,0 +1,97 @@
+const GP = require("../models/gp.model");
+
+
+module.exports.SignUpClient = async (req, res) => {
+
+    try {
+        console.log('ok');
+
+        const capacite = await GP.findById(req.params.id).select("poid_restant client");
+        const gp_cap = capacite.poid_restant;
+
+        console.log(gp_cap);
+        
+        console.log(req.body.poid_colis);
+        
+        const poid_restant = gp_cap - req.body.poid_colis;
+
+        console.log(poid_restant);
+        
+        const existingClient = capacite.client.find(client => client.number === req.body.number);
+        if (existingClient) {
+            return res.status(400).send({ error: "Duplicate field value entered" });
+        }
+
+        const updatedGP = await GP.findByIdAndUpdate(req.params.id, {poid_restant: poid_restant});
+
+
+        const client = await GP.findByIdAndUpdate(
+            req.params.id,
+            {
+                $push: {
+                    client: {
+                        nom: req.body.nom,
+                        prenom: req.body.prenom,
+                        pays: req.body.pays,
+                        ville: req.body.ville,
+                        number: req.body.number,
+                        poid_colis: req.body.poid_colis,
+                        timestamp: new Date().getTime()
+                    }
+                }
+            },
+            { new: true,}
+        );
+        if (!client) return res.status(404).send({ error: "GP not found" });
+        return res.status(200).send(client);
+    } catch (err) {
+        if (err.code === 11000) { 
+            return res.status(400).send({ error: "Duplicate field value entered" });
+        }
+        return res.status(400).send(err);
+    }
+};
+
+module.exports.deleteClient = async (req, res) => {
+    try {
+
+        const capacite = await GP.findById(req.body.id).select("poid_restant client");
+        const gp_cap = capacite.poid_restant;
+
+        console.log(gp_cap);
+        
+
+        const ajout = capacite.client.find(client => client.number === req.body.number);
+        const poids = ajout.poid_colis;
+
+        
+        console.log(poids);
+
+        const new_poid = gp_cap + poids;
+
+        console.log(new_poid);
+        
+
+        const updatedGP = await GP.findByIdAndUpdate
+        (
+            req.body.id, 
+            {poid_restant: new_poid}
+        );
+
+
+        const {id, number} = req.body;
+        const gp = await GP.findByIdAndUpdate(
+            id,
+            {
+                $pull: {
+                    client: {number: number}
+                }
+            },
+            { new: true,}
+        );
+        if (!gp) return res.status(404).send({ error: "GP not found" });
+        return res.status(200).send(gp);
+    } catch (err) {
+        return res.status(400).send(err);
+    }
+};

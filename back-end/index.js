@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const connectDB = require('./config/db');
 const userRoute = require('./routes/user.route.js');
 const gpRoute = require('./routes/gp.route.js');
+const clientRoute = require('./routes/client.route.js');
 
 //app.use(cors())
 
@@ -29,6 +30,7 @@ connectDB();
 
 app.use("/api/user", userRoute); 
 app.use("/api/gp", gpRoute); 
+app.use("/api/client", clientRoute); 
 
 
 // Route de test

@@ -4,8 +4,11 @@ module.exports.createGp = async (req, res) => {
     try {
         const newGP = await GP.create(req.body);
         res.status(200).json({ gp: newGP });
+        
+        const rest_gp = await GP.findOneAndUpdate({gp_name: req.body.gp_name}, {poid_restant: req.body.capacite});
+
     } catch (err) {
-        console.error(err); // Affiche l'erreur dans la console pour le débogage
+        console.error(err); 
         res.status(400).json({ err });
     }
 };

@@ -8,7 +8,7 @@ const createToken = (id) => {
         expiresIn: maxAge
     })
 };
-
+   
 module.exports.signUp = async (req, res) => {
     try{
         const user = await User.create(req.body);
@@ -57,6 +57,8 @@ module.exports.getUser = async (req, res) => {
         const userId = req.params.userId;
 
         const Users = await User.findById({_id: req.params.userId}).select("pseudo");
+        console.log(Users);
+        
         res.status(200).json(Users);
     } catch (error) {
         throw error    }

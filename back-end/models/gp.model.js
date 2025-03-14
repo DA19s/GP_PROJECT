@@ -4,7 +4,8 @@ const GPSchema = new mongoose.Schema(
     {
         gp_name: {
             type: String,
-            required: true
+            required: true,
+            unique: true
         },
 
         description: {
@@ -76,7 +77,7 @@ const GPSchema = new mongoose.Schema(
                     nom: String,
                     pays: String,
                     ville: String,
-                    number: String,
+                    number: {type: String, unique: true},
                     poid_colis: Number,
                     timestamp: Number,
                 }
