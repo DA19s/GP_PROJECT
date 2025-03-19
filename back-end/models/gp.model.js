@@ -75,10 +75,10 @@ const GPSchema = new mongoose.Schema(
                 {
                     prenom: String,
                     nom: String,
-                    pays: String,
-                    ville: String,
                     number: {type: String, unique: true},
+                    email: {type: String, unique: true},
                     poid_colis: Number,
+                    prix: Number,
                     timestamp: Number,
                 }
             ],

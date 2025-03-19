@@ -1,16 +1,16 @@
 const express = require("express");
 const router = express.Router();
-const {getGps, getGp, createGp, updateGp, deleteGp} = require('../controllers/gp.controller.js');
+const {getGps, getGp, getGpO, createGp, updateGp, deleteGp} = require('../controllers/gp.controller.js');
 
 
 router.get('/', getGps);
-router.get('/:gpId', getGp);
-
+router.get('/gpg/:gpId', getGp);
+router.get("/gpo", getGpO);
 router.post("/create", createGp);
 
-router.put("/:gpId", updateGp);
+router.put("/:id", updateGp);
 
-router.delete("/:gpName", deleteGp);
+router.delete("/:id", deleteGp);
 
 
 module.exports = router;

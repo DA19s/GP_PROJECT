@@ -1,4 +1,5 @@
 const GP = require("../models/gp.model");
+const temp = require("../models/temp.model");
 
 
 module.exports.SignUpClient = async (req, res) => {
@@ -11,13 +12,22 @@ module.exports.SignUpClient = async (req, res) => {
 
         console.log(gp_cap);
         
-        console.log(req.body.poid_colis);
+        const info = await temp.findById(req.params.id2)
+
+        const nom = info.nom;
+        const prenom = info.prenom;
+        const number = info.number;
+        const poid_colis = info.poid_colis;
+        const prix = info.prix;
+
+        console.log('ok' + poid_colis);
         
-        const poid_restant = gp_cap - req.body.poid_colis;
+        
+        const poid_restant = gp_cap - poid_colis;
 
         console.log(poid_restant);
         
-        const existingClient = capacite.client.find(client => client.number === req.body.number);
+        const existingClient = capacite.client.find(client => client.number === number);
         if (existingClient) {
             return res.status(400).send({ error: "Duplicate field value entered" });
         }
@@ -30,12 +40,11 @@ module.exports.SignUpClient = async (req, res) => {
             {
                 $push: {
                     client: {
-                        nom: req.body.nom,
-                        prenom: req.body.prenom,
-                        pays: req.body.pays,
-                        ville: req.body.ville,
-                        number: req.body.number,
-                        poid_colis: req.body.poid_colis,
+                        nom: nom,
+                        prenom: prenom,
+                        number: number,
+                        poid_colis: poid_colis,
+                        prix: prix,
                         timestamp: new Date().getTime()
                     }
                 }
@@ -55,7 +64,7 @@ module.exports.SignUpClient = async (req, res) => {
 module.exports.deleteClient = async (req, res) => {
     try {
 
-        const capacite = await GP.findById(req.body.id).select("poid_restant client");
+        const capacite = await GP.findById(req.params.id).select("poid_restant client");
         const gp_cap = capacite.poid_restant;
 
         console.log(gp_cap);
@@ -74,12 +83,13 @@ module.exports.deleteClient = async (req, res) => {
 
         const updatedGP = await GP.findByIdAndUpdate
         (
-            req.body.id, 
+            req.params.id, 
             {poid_restant: new_poid}
         );
 
 
-        const {id, number} = req.body;
+        const number = req.body.number;
+        const id = req.params.id
         const gp = await GP.findByIdAndUpdate(
             id,
             {

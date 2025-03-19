@@ -6,22 +6,27 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const connectDB = require('./config/db');
 const userRoute = require('./routes/user.route.js');
+const cliRoute = require('./routes/auth.client.route.js');
 const gpRoute = require('./routes/gp.route.js');
 const clientRoute = require('./routes/client.route.js');
-
-//app.use(cors())
-
-
-
-
-// Configuration des variables d'environnement
+const tempRoute = require('./routes/temp.route.js');
+const app = express();
 dotenv.config();
 
-const app = express();
 const PORT = process.env.PORT || 3000;
+//app.use(cors())
+app.use(cors({
+  origin: 'http://localhost:5173', 
+  credentials: true, 
+}));
+
+
+
+
+//Configuration des variables d'environnement
+
 
 // Middleware
-app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
@@ -29,8 +34,10 @@ app.use(cookieParser());
 connectDB();
 
 app.use("/api/user", userRoute); 
+app.use("/api/cli", cliRoute); 
 app.use("/api/gp", gpRoute); 
 app.use("/api/client", clientRoute); 
+app.use("/api/temp", tempRoute); 
 
 
 // Route de test
