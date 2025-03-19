@@ -22,9 +22,8 @@ const clientSchema = mongoose.Schema(
             unique: true
         },
         
-        number: {
+        code: {
             type: String,
-            required: [true],
             trim: true,
             unique: true
         },

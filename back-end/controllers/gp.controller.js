@@ -5,7 +5,44 @@ const jwt = require('jsonwebtoken');
 
 module.exports.createGp = async (req, res) => {
     try {
-        const newGP = await GP.create(req.body);
+
+        const token = req.cookies.jwt;
+        
+        if (!token) {
+            return res.status(401).json({ message: 'Token not provided, please log in.' });
+        }
+    
+        const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
+        const userId = decodedToken.id;  
+        console.log(userId);
+        const info = await User.findById(userId)
+
+        const nom = info.nom;
+        const prenom = info.prenom;
+        const number = info.number;
+
+        const owner = (prenom + " " + nom)
+        //console.log(owner);
+        
+
+        const newGP = await GP.create({
+            owner: owner,
+            owner_number: number,
+            gp_name: req.body.gp_name,
+            pays_depart: req.body.pays_depart,
+            ville_depart: req.body.ville_depart,
+            adresse_depart: req.body.adresse_depart,
+            pays_destination: req.body.pays_destination,
+            ville_destination: req.body.ville_destination,
+            adresse_destination: req.body.adresse_destination,
+            capacite: req.body.capacite,
+            poid_restant: req.body.poid_restant,
+            poid_utilise: req.body.poid_utilise,
+            date_depart: req.body.date_depart,
+            date_arrive: req.body.date_arrive,
+            prix_kilo: req.body.prix_kilo
+            
+        });
         res.status(200).json({ gp: newGP });
         
         const rest_gp = await GP.findOneAndUpdate({gp_name: req.body.gp_name}, {poid_restant: req.body.capacite});
@@ -50,9 +87,14 @@ module.exports.getGpO = async (req, res) => {
         console.log(userId);
 
         const user = await User.findById(userId);
-        console.log(user.pseudo);
+        const nom = user.nom
+        const prenom = user.prenom 
 
-        const gpo = await GP.find({owner: user.pseudo});
+        const owner = (prenom + " " + nom)
+
+        console.log(owner);
+        
+        const gpo = await GP.find({owner: owner});
         console.log(gpo);
         res.status(200).json(gpo);
     } catch (error) {

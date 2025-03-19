@@ -8,10 +8,6 @@ const GPSchema = new mongoose.Schema(
             unique: true
         },
 
-        description: {
-            type: String
-        },
-
         owner: {
             type: String,
             required: true
@@ -32,12 +28,22 @@ const GPSchema = new mongoose.Schema(
             required: true
         },
         
+        adresse_depart: {
+            type: String,
+            required: true
+        },
+        
         pays_destination: {
             type: String,
             required: true
         },
         
         ville_destination: {
+            type: String,
+            required: true
+        },
+        
+        adresse_destination: {
             type: String,
             required: true
         },

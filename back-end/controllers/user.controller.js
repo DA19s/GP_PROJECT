@@ -1,6 +1,7 @@
 const User = require("../models/user.model");
 const jwt = require('jsonwebtoken');
 const {signUpErrors, signInErrors} = require('../utils/errors.utils.js');
+const mail = require('../utils/mailer.js')
 
 maxAge = 3 * 24 * 60 * 60 * 1000;
 const createToken = (id) => {
@@ -12,10 +13,70 @@ const createToken = (id) => {
 module.exports.signUp = async (req, res) => {
     try{
         const user = await User.create(req.body);
+     
+        const generateNumericCode = (length) => {
+            let code = '';
+            for (let i = 0; i < length; i++) {
+                code += Math.floor(Math.random() * 10); // Génère un chiffre entre 0 et 9
+            }
+            return code;
+        };
+        
+
+        const code = generateNumericCode(6)
+
+        console.log(code);
+        
+        console.log('ok');
+        
+        await User.findOneAndUpdate({email: req.body.email}, {code: code}, {new: true})
+
+        console.log('ok');
+        
+        const email = req.body.email;
+        await mail(
+            email, // Adresse e-mail du destinataire
+            'Confirmation', // Sujet de l'e-mail
+            `Votre code est ${code}`,// Texte brut
+            `<p>Votre code est ${code}</p>` // Contenu HTML
+        );       
+        
+        res.status(200).json({user})
+
+     } catch (err) {  
+        const errors = signUpErrors(err);
+         res.status(400).send( {errors} );
+     }
+
+}
+
+module.exports.verifyCode = async (req, res) => {
+    try{
+
+        console.log(req.params.email);
+        
+    const user = await User.findOne({email: req.params.email})
+
+    console.log(user);
+    
+    if (!user){
+        return res.status(401).json({message: 'Pas de user'})
+    }
+    console.log(user.code);
+    
+
+    if (user.code === req.body.code)
+    {
+
+        code = await User.findOneAndUpdate({email: req.params.email}, {code: null})
         const token = createToken(user._id)
         res.cookie('jwt', token, {httpOnly: true, secure: false, sameSite: 'lax', maxAge:maxAge})
-        res.status(200).json({user: user._id, token: token })
-     } catch (err) {  
+        res.status(200).json({user: code._id, token: token })
+    }
+    else {
+        code = await User.findOneAndDelete({email: req.params.email})
+    }
+    } catch (err) {  
         const errors = signUpErrors(err);
          res.status(400).send( {errors} );
      }

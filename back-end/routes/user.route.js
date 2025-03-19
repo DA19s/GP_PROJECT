@@ -1,12 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const {getUsers, getUser, updateUser, deleteUser, signUp, signIn, logout} = require('../controllers/user.controller.js');
+const {getUsers, getUser, updateUser, deleteUser, signUp, signIn, logout, verifyCode} = require('../controllers/user.controller.js');
 
 
 router.get('/', getUsers);
 router.get('/:userId', getUser);
 
 router.post("/register", signUp);
+router.post("/verify/:email", verifyCode);
 router.post('/login', signIn);
 
 router.put("/:pseudo", updateUser);

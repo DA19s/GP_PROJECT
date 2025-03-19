@@ -21,11 +21,16 @@ const Dashboard = () => {
         localStorage.removeItem('token');
         navigate('/login');
     };
+    
+    const creategp = () => {
+        navigate('/create_gp');
+    };
 
     return (
         <div>
             <h1>Dashboard</h1>
             <button onClick={handleLogout}>Se déconnecter</button>
+            <button onClick={creategp}>Creer un gp</button>
 
             {items.map(item => (
                 <div key={item._id}>

@@ -2,7 +2,6 @@ const User = require("../models/client.model");
 const jwt = require('jsonwebtoken');
 const {signUpErrors, signInErrors} = require('../utils/errors.utils.js');
 const mail = require('../utils/mailer.js')
-const code = require("../models/code.model")
 
 maxAge = 3 * 24 * 60 * 60 * 1000;
 const createToken = (id) => {
@@ -14,10 +13,7 @@ const createToken = (id) => {
 module.exports.signUp = async (req, res) => {
     try{
         const user = await User.create(req.body);
-        const token = createToken(user._id)
-        res.cookie('jwt', token, {httpOnly: true, secure: false, sameSite: 'lax', maxAge:maxAge})
-        res.status(200).json({user: user._id, token: token })
-
+     
         const generateNumericCode = (length) => {
             let code = '';
             for (let i = 0; i < length; i++) {
@@ -26,21 +22,26 @@ module.exports.signUp = async (req, res) => {
             return code;
         };
         
-        console.log(generateNumericCode(6)); // Exemple : 123456
 
         const code = generateNumericCode(6)
 
         console.log(code);
         
+        console.log('ok');
+        
+        await User.findOneAndUpdate({email: req.body.email}, {code: code}, {new: true})
 
-        code = await code.create({code: code, email: req.body.email})
-
+        console.log('ok');
+        
+        const email = req.body.email;
         await mail(
-            'ibhdaz@gmail.com', // Adresse e-mail du destinataire
+            email, // Adresse e-mail du destinataire
             'Confirmation', // Sujet de l'e-mail
             `Votre code est ${code}`,// Texte brut
             `<p>Votre code est ${code}</p>` // Contenu HTML
-        );        
+        );       
+        
+        res.status(200).json({user})
 
      } catch (err) {  
         const errors = signUpErrors(err);
@@ -49,19 +50,37 @@ module.exports.signUp = async (req, res) => {
 
 }
 
-module.exports.verifyCode = asyn (req, res) => {
-    const user = code.find({email: req.params.email})
+module.exports.verifyCode = async (req, res) => {
+    try{
 
-    if (!user)
+        console.log(req.params.email);
+        
+    const user = await User.findOne({email: req.params.email})
+
+    console.log(user);
+    
+    if (!user){
         return res.status(401).json({message: 'Pas de user'})
+    }
+    console.log(user.code);
+    
 
-    if (user.code == res.params.code)
+    if (user.code === req.body.code)
     {
+
+        code = await User.findOneAndUpdate({email: req.params.email}, {code: null})
         const token = createToken(user._id)
         res.cookie('jwt', token, {httpOnly: true, secure: false, sameSite: 'lax', maxAge:maxAge})
-        res.status(200).json({user: user._id, token: token })
-
+        res.status(200).json({user: code._id, token: token })
     }
+    else {
+        code = await User.findOneAndDelete({email: req.params.email})
+    }
+    } catch (err) {  
+        const errors = signUpErrors(err);
+         res.status(400).send( {errors} );
+     }
+
 }
 
 

@@ -15,8 +15,9 @@ const Signup = () => {
       const handleSignup = async (e) => {
         e.preventDefault();
         try {
-          const response = await axios.post(`http://localhost:3000/api/user/register`, {pseudo, nom, prenom, email, number, password}, { withCredentials: true })
-          navigate(`/verify_user/${email}`)
+          const response = await axios.post('http://localhost:3000/api/cli/register', {pseudo, nom, prenom, email, number, password}, { withCredentials: true })
+          localStorage.setItem('token', response.data.token)          
+          navigate('/verify_client')
         } catch (error) {
           console.error('Erreur de connexion', error);
           
