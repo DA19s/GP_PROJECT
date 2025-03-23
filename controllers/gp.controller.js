@@ -2,18 +2,11 @@ const GP = require("../models/gp.model");
 const TEMP = require("../models/temp.model");
 const User = require("../models/user.model");
 const jwt = require('jsonwebtoken');
-
-module.exports.createGp = async (req, res) => {
+const requireAuth = require('../middleware/requireAuth'); 
+module.exports.createGp =[ requireAuth, async (req, res) => {
     try {
-
-        const token = req.cookies.jwt;
         
-        if (!token) {
-            return res.status(401).json({ message: 'Token not provided, please log in.' });
-        }
-    
-        const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
-        const userId = decodedToken.id;  
+       const userId = req.userId 
         console.log(userId);
         const info = await User.findById(userId)
 
@@ -22,7 +15,7 @@ module.exports.createGp = async (req, res) => {
         const number = info.number;
 
         const owner = (prenom + " " + nom)
-        //console.log(owner);
+        console.log(owner);
         
 
         const newGP = await GP.create({
@@ -51,7 +44,7 @@ module.exports.createGp = async (req, res) => {
         console.error(err); 
         res.status(400).json({ err });
     }
-};
+}];
 
 
 module.exports.getGps = async (req, res) => {
@@ -74,19 +67,15 @@ module.exports.getGp = async (req, res) => {
         throw error    }
 }
 
-module.exports.getGpO = async (req, res) => {
+module.exports.getGpO = [ requireAuth, async (req, res) => {
     try {
-        const token = req.cookies.jwt;
-
-        if (!token) {
-            return res.status(401).json({ message: 'Token not provided, please log in.' });
-        }
-    
-        const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
-        const userId = decodedToken.id;  
+        const userId = req.userId  
         console.log(userId);
 
         const user = await User.findById(userId);
+
+        console.log(user);
+        
         const nom = user.nom
         const prenom = user.prenom 
 
@@ -99,7 +88,7 @@ module.exports.getGpO = async (req, res) => {
         res.status(200).json(gpo);
     } catch (error) {
         throw error    }
-}
+}]
 
 module.exports.updateGp = async (req, res) => {
      try {

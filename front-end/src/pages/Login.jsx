@@ -11,12 +11,17 @@ const Login = () => {
       const handleLogin = async (e) => {
         e.preventDefault();
         try {
-          const response = await axios.post('http://localhost:3000/api/cli/login', {email, password}, { withCredentials: true})
+          const response = await axios.post('http://localhost:3000/api/user/login', {email, password}, {withCredentials: true})
           console.log(response);
-          localStorage.setItem('token', response.data.token)
           console.log(response.data.token);
-          
+          if (response.data.token) {
+            sessionStorage.setItem('token', response.data.token);
+            axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+            console.log('Token reçu:', response.data.token);
           navigate('/dashboard')
+        } else {
+          console.error("Erreur: Aucun token reçu.");
+      }
         } catch (error) {
           console.error('Erreur de connexion', error);
           

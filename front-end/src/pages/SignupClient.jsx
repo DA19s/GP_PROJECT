@@ -1,24 +1,23 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-
+import getCookie from './getCookie'
 const SignupClient = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    const [ville, setVille] = useState('');
-    const [pays, setPays] = useState('');
-    const [nom, setNom] = useState('');
-    const [prenom, setPrenom] = useState('');
-    const [number, setNumber] = useState('');
+    const [gp_name, setGp_name] = useState('');
     const [poid_colis, setPoid_colis] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
-
     const handleSignupClient = async (e) => {
         e.preventDefault();
+        const token = sessionStorage.getItem('token'); 
+        console.log('Token récupéré depuis le cookie :', token);
         try {
-            const response = await axios.put(`http://localhost:3000/api/client/${id}`, { nom, prenom, ville, pays, number, poid_colis }, { withCredentials: true });
-            localStorage.setItem('token', response.data.token);
+            const response = await axios.post(`http://localhost:3000/api/temp/create`, {gp_name, poid_colis },{
+                headers: { Authorization: `Bearer ${token}` },
+                withCredentials: true,
+            });
             navigate('/dashClient');
         } catch (error) {
             if (error.response && error.response.data && error.response.data.error === "Duplicate field value entered") {
@@ -37,33 +36,9 @@ const SignupClient = () => {
             <form onSubmit={handleSignupClient}>
                 <input
                     type="text"
-                    placeholder="Nom"
-                    value={nom}
-                    onChange={(e) => setNom(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="Prenom"
-                    value={prenom}
-                    onChange={(e) => setPrenom(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="Ville"
-                    value={ville}
-                    onChange={(e) => setVille(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="Pays"
-                    value={pays}
-                    onChange={(e) => setPays(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="Number"
-                    value={number}
-                    onChange={(e) => setNumber(e.target.value)}
+                    placeholder="gp_name"
+                    value={gp_name}
+                    onChange={(e) => setGp_name(e.target.value)}
                 />
                 <input
                     type="text"

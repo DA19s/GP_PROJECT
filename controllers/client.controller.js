@@ -1,5 +1,6 @@
 const GP = require("../models/gp.model");
 const temp = require("../models/temp.model");
+const requireAuth = require('../middleware/requireAuth'); 
 
 
 module.exports.SignUpClient = async (req, res) => {
@@ -17,6 +18,7 @@ module.exports.SignUpClient = async (req, res) => {
         const nom = info.nom;
         const prenom = info.prenom;
         const number = info.number;
+        const email = info.email;
         const poid_colis = info.poid_colis;
         const prix = info.prix;
 
@@ -27,13 +29,24 @@ module.exports.SignUpClient = async (req, res) => {
 
         console.log(poid_restant);
         
+        console.log(number);
+        
         const existingClient = capacite.client.find(client => client.number === number);
         if (existingClient) {
             return res.status(400).send({ error: "Duplicate field value entered" });
         }
 
-        const updatedGP = await GP.findByIdAndUpdate(req.params.id, {poid_restant: poid_restant});
+        console.log(existingClient);
+        
 
+
+
+        const updatedGP = await GP.findByIdAndUpdate(req.params.id, {poid_restant: poid_restant});
+        console.log(updatedGP);
+        
+
+        console.log("okkk");
+        
 
         const client = await GP.findByIdAndUpdate(
             req.params.id,
@@ -43,6 +56,7 @@ module.exports.SignUpClient = async (req, res) => {
                         nom: nom,
                         prenom: prenom,
                         number: number,
+                        email: email,
                         poid_colis: poid_colis,
                         prix: prix,
                         timestamp: new Date().getTime()
@@ -51,7 +65,14 @@ module.exports.SignUpClient = async (req, res) => {
             },
             { new: true,}
         );
+        console.log("okkk");
+
         if (!client) return res.status(404).send({ error: "GP not found" });
+        console.log("okkk");
+
+        const TEMPO = await temp.findByIdAndDelete(req.params.id2);
+        if (!TEMPO) return res.status(404).send({ error: "TEMP not found" });
+
         return res.status(200).send(client);
     } catch (err) {
         if (err.code === 11000) { 

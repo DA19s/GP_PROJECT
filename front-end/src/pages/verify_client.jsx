@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 
-const Verify_user = () => {
+const Verify_client = () => {
     const [code, setCode] = useState('');
     const { email } = useParams(); 
     const navigate = useNavigate();
@@ -11,9 +11,15 @@ const Verify_user = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post(`http://localhost:3000/api/user/verify/${email}`, { code }, { withCredentials: true });
-            localStorage.setItem('token', response.data.token);
-            navigate('/Dashboard');
+            const response = await axios.post(`http://localhost:3000/api/cli/verify/${email}`, { code }, {withCredentials: true});
+            if (response.data.token) {
+                sessionStorage.setItem('token', response.data.token);
+                axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+                console.log('Token reçu:', response.data.token);
+            navigate('/DashClient');
+        } else {
+            console.error("Erreur: Aucun token reçu.");
+        }
         } catch (error) {
             console.error('Erreur de connexion', error);
         }
@@ -35,4 +41,4 @@ const Verify_user = () => {
     );
 };
 
-export default Verify_user;
+export default Verify_client;

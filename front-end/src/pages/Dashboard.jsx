@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const ViewGp = () => {
+const Dashboard = () => {
     const navigate = useNavigate();
     const [items, setItems] = useState([]);
-
-    const {id} = useParams();
-
-
+    const token = sessionStorage.getItem('token'); 
     useEffect(() => {
-        axios.get(`http://localhost:3000/api/gp/gpg/${id}`, { withCredentials: true })
+        axios.get('http://localhost:3000/api/gp/gpo',{
+            headers: { Authorization: `Bearer ${token}` },
+            withCredentials: true,
+        })
             .then((response) => {
                 console.log(response.data);
                 setItems(response.data);
@@ -20,14 +20,43 @@ const ViewGp = () => {
             });
     }, []);
 
-    const handlegp = () => {
-        navigate(`/client/${id}`);
+    const handleLogout = () => {
+        localStorage.removeItem('jwt');
+        navigate('/login');
     };
+    
+    const creategp = () => {
+        navigate('/create_gp');
+    };
+    
+    const updateGp = (id) => {
+        navigate(`/update/${id}`);
+    };
+    
+    const viewAsk = (id) => {
+        navigate(`/viewAsk/${id}`);
+    };
+
+    const deleteGp = async (id) => {
+        try {
+          const response = await axios.delete(`http://localhost:3000/api/gp/${id}`, { withCredentials: true})
+          console.log(response);
+          setItems(items.filter(item => item._id !== id));
+          localStorage.setItem('token', response.data.token)
+          console.log(response.data.token);
+          
+        } catch (error) {
+          console.error('Erreur de connexion', error);
+          
+          
+        }
+      }
 
     return (
         <div>
-            <h1>ViewGp</h1>
-            <button onClick={handlegp}>S'inscrire sur ce gp</button>
+            <h1>Dashboard</h1>
+            <button onClick={handleLogout}>Se déconnecter</button>
+            <button onClick={creategp}>Creer un gp</button>
 
             {items.map(item => (
                 <div key={item._id}>
@@ -53,10 +82,13 @@ const ViewGp = () => {
                         </li>
                         ))}
                     </ul>
+                    <button onClick={() => viewAsk(item._id)}>Demandes</button>
+                    <button onClick={() => updateGp(item._id)}>Modifier</button>
+                    <button onClick={() => deleteGp(item._id)}>Supprimer</button>
                 </div>
             ))}
         </div>
     );
 };
 
-export default ViewGp;
+export default Dashboard;

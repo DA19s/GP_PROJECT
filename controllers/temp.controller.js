@@ -5,26 +5,20 @@ const client = require("../models/client.model");
 const User = require("../models/user.model");
 const jwt = require('jsonwebtoken');
 const mail = require('../utils/mailer.js')
+const requireAuth = require('../middleware/requireAuth'); 
 
 
-module.exports.AskClient = async (req, res) => {
-
+module.exports.AskClient = [ requireAuth, async (req, res) => {
     try {
         console.log('ok');
-        const token = req.cookies.jwt;
-        
-        if (!token) {
-            return res.status(401).json({ message: 'Token not provided, please log in.' });
-        }
-    
-        const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
-        const userId = decodedToken.id;  
+        const userId = req.userId
         console.log(userId);
         const info = await client.findById(userId)
 
         const nom = info.nom;
         const prenom = info.prenom;
         const number = info.number;
+        const email = info.email;
 
         console.log(nom);
 
@@ -51,7 +45,7 @@ module.exports.AskClient = async (req, res) => {
 
 
         
-        const temp = await TEMP.create({gp_name: req.body.gp_name, nom: nom, prenom: prenom, number: number, poid_colis: req.body.poid_colis, prix: prix});
+        const temp = await TEMP.create({gp_name: req.body.gp_name, nom: nom, prenom: prenom, number: number, poid_colis: req.body.poid_colis, email: email, prix: prix});
         console.log('ok');
         await mail(
             'ibhdaz@gmail.com', // Adresse e-mail du destinataire
@@ -66,7 +60,7 @@ module.exports.AskClient = async (req, res) => {
         return res.status(400).send(err);
     }
     
-};
+}]
 
 module.exports.deleteAskClient = async (req, res) => {
     try {

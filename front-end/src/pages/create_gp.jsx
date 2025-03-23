@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+
 const Create = () => {
     const [gp_name, setGp_name] = useState('');
     const [pays_depart, setPays_depart] = useState('');
@@ -26,6 +27,7 @@ const Create = () => {
             return;
         }
 
+        const token = sessionStorage.getItem('token'); 
         try {
             const response = await axios.post(
                 `http://localhost:3000/api/gp/create`,
@@ -42,8 +44,10 @@ const Create = () => {
                     date_arrive,
                     prix_kilo,
                 },
-                { withCredentials: true }
-            );
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                    withCredentials: true,
+                })
             console.log('GP créé avec succès :', response.data);
             navigate(`/Dashboard`); // Redirection après la création
         } catch (error) {

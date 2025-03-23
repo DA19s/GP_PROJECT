@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import getCookie from './getCookie'
 
-const Dashboard = () => {
+const ViewGp = () => {
     const navigate = useNavigate();
     const [items, setItems] = useState([]);
 
+    const {id} = useParams();
+    const token = sessionStorage.getItem('token'); 
+
     useEffect(() => {
-        axios.get('http://localhost:3000/api/gp/gpo', { withCredentials: true })
+        axios.get(`http://localhost:3000/api/gp/gpg/${id}`, {
+            headers: { Authorization: `Bearer ${token}` },
+            withCredentials: true,
+        })
             .then((response) => {
                 console.log(response.data);
                 setItems(response.data);
@@ -17,20 +24,14 @@ const Dashboard = () => {
             });
     }, []);
 
-    const handleLogout = () => {
-        localStorage.removeItem('token');
-        navigate('/login');
-    };
-    
-    const creategp = () => {
-        navigate('/create_gp');
+    const handlegp = () => {
+        navigate(`/client/${id}`);
     };
 
     return (
         <div>
-            <h1>Dashboard</h1>
-            <button onClick={handleLogout}>Se déconnecter</button>
-            <button onClick={creategp}>Creer un gp</button>
+            <h1>ViewGp</h1>
+            <button onClick={handlegp}>S'inscrire sur ce gp</button>
 
             {items.map(item => (
                 <div key={item._id}>
@@ -62,4 +63,4 @@ const Dashboard = () => {
     );
 };
 
-export default Dashboard;
+export default ViewGp;

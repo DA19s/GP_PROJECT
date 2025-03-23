@@ -89,9 +89,10 @@ module.exports.signIn = async (req, res) => {
     try {
         const user = await User.login(email, password);
         const token = createToken(user._id)
+        console.log(token);
+
         res.cookie('jwt', token, {httpOnly: true, secure: false, sameSite: 'lax', maxAge:maxAge})
         res.status(200).json({user: user._id, token: token })
-        console.log(token);
 
     } catch (err) { 
         const errors = signInErrors(err);

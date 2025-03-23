@@ -13,6 +13,8 @@ const createToken = (id) => {
 module.exports.signUp = async (req, res) => {
     try{
         const user = await User.create(req.body);
+        console.log(user);
+        
      
         const generateNumericCode = (length) => {
             let code = '';
@@ -55,7 +57,7 @@ module.exports.verifyCode = async (req, res) => {
 
         console.log(req.params.email);
         
-    const user = await User.findOne({email: req.params.email})
+       const user = await User.findOne({email: req.params.email,})
 
     console.log(user);
     
@@ -70,8 +72,10 @@ module.exports.verifyCode = async (req, res) => {
 
         code = await User.findOneAndUpdate({email: req.params.email}, {code: null})
         const token = createToken(user._id)
-        res.cookie('jwt', token, {httpOnly: true, secure: false, sameSite: 'lax', maxAge:maxAge})
+        res.cookie('jwt', token, {httpOnly: true, secure: false, sameSite: 'Strict', maxAge:maxAge})
         res.status(200).json({user: code._id, token: token })
+        console.log(token);
+        
     }
     else {
         code = await User.findOneAndDelete({email: req.params.email})
@@ -90,7 +94,7 @@ module.exports.signIn = async (req, res) => {
     try {
         const user = await User.login(email, password);
         const token = createToken(user._id)
-        res.cookie('jwt', token, {httpOnly: true, secure: false, sameSite: 'lax', maxAge:maxAge})
+        res.cookie('jwt', token, {httpOnly: true, secure: false, sameSite: 'Strict', maxAge:maxAge})
         res.status(200).json({user: user._id, token: token })
         console.log(token);
 
@@ -101,8 +105,9 @@ module.exports.signIn = async (req, res) => {
 }
 
 module.exports.logout = async (req, res) => {
-    res.cookie('jwt', '', { maxAge: 1});
-    res.redirect('/');
+    res.clearCookie('jwt', { httpOnly: true, secure: true, sameSite: 'Strict' });
+    res.status(200).json({ message: "Déconnexion réussie" });
+    
 }
 
 module.exports.getUsers = async (req, res) => {

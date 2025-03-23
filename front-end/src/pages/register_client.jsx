@@ -2,10 +2,9 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
-const Signup = () => {
+const Signup_client = () => {
 
     const [email, setEmail] = useState('')
-    const [pseudo, setPseudo] = useState('')
     const [nom, setNom] = useState('')
     const [prenom, setPrenom] = useState('')
     const [number, setNumber] = useState('')
@@ -15,9 +14,9 @@ const Signup = () => {
       const handleSignup = async (e) => {
         e.preventDefault();
         try {
-          const response = await axios.post('http://localhost:3000/api/cli/register', {pseudo, nom, prenom, email, number, password}, { withCredentials: true })
+          const response = await axios.post('http://localhost:3000/api/cli/register', {nom, prenom, email, number, password}, { withCredentials: true })
           localStorage.setItem('token', response.data.token)          
-          navigate('/verify_client')
+          navigate(`/verify_client/${email}`)
         } catch (error) {
           console.error('Erreur de connexion', error);
           
@@ -34,11 +33,6 @@ const Signup = () => {
         <h1>Connexion</h1>
         <form onSubmit={handleSignup}>
         <input
-            type="text"
-            placeholder="Pseudo"
-            value={pseudo}
-            onChange={(e) => setPseudo(e.target.value)}
-          />          <input
           type="text"
           placeholder="Nom"
           value={nom}
@@ -72,4 +66,4 @@ const Signup = () => {
   };
 
 
-export default Signup
+export default Signup_client

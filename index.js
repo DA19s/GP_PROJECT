@@ -10,6 +10,8 @@ const cliRoute = require('./routes/auth.client.route.js');
 const gpRoute = require('./routes/gp.route.js');
 const clientRoute = require('./routes/client.route.js');
 const tempRoute = require('./routes/temp.route.js');
+const requireAuth = require('./middleware/requireAuth'); // Import du middleware
+
 const app = express();
 dotenv.config();
 
