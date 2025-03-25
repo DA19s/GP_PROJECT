@@ -30,7 +30,7 @@ function App() {
           <Route path="/dashClient" element={<DashboardClient />} />
           <Route path="/client/:id" element={<SignupClient />} />
           <Route path="/update/:id" element={<Update />} />
-          <Route path="/view-gp" element={<ViewGp />} /> {/* Correction ici */}
+          <Route path="/viewGp/:id" element={<ViewGp />} /> {/* Correction ici */}
           <Route path="/viewAsk/:id" element={<ViewAsk />} />
           <Route path="/" element={<Accueil />} />
         </Routes>

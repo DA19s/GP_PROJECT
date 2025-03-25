@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"; // Importation de useNavigate
 import logo from "../assets/Capture d’écran 2025-03-23 à 15.05.00.png"; // Assurez-vous que le logo est dans src/assets/logo.png
 import circleImage from "../assets/gppro.png"; // Remplacez avec votre image
-import "/Users/macretina/Desktop/GP_PROJECT/front-end/src/pages/Accueil.css";
+import "../pages/Accueil.css";
 
 const Accueil = () => {
   const [fadeIn, setFadeIn] = useState(false);
@@ -16,7 +16,10 @@ const Accueil = () => {
 
   // Fonction pour gérer la redirection vers ViewGp
   const handleButtonClick = () => {
-    navigate("/view-gp"); // Redirige vers la page ViewGp
+    navigate("/login_client"); // Redirige vers la page ViewGp
+  };
+    const handleRegClick = () => {
+    navigate("/register_client"); // Redirige vers la page ViewGp
   };
   return (
     <div className={`container ${fadeIn ? "fade-in" : ""}`}>
@@ -38,7 +41,10 @@ const Accueil = () => {
             <li>📱💸 Paiement en ligne</li>
           </ul>
           <button className="cta-button" onClick={handleButtonClick}>
-            Voir les GP disponibles
+            Connexion <br></br>
+          </button>
+          <button className="cta-button" onClick={handleRegClick}>
+            Inscription
           </button>
         </div>
 

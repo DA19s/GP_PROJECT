@@ -3,9 +3,9 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import logo from "../assets/Capture d’écran 2025-03-23 à 15.05.00.png";
-import coteIvoireFlag from "../assets/image copy.png";
-import senegalFlag from "../assets/image.png";
-import "../pages/Accueil.css";
+import coteIvoireFlag from "../assets/civ.jpg";
+import senegalFlag from "../assets/sn.jpg";
+import "../pages/viewGp.css";
 
 const ViewGp = () => {
   const navigate = useNavigate();
