@@ -18,7 +18,7 @@ const Accueil = () => {
   const handleButtonClick = () => {
     navigate("/login_client"); // Redirige vers la page ViewGp
   };
-    const handleRegClick = () => {
+  const handleRegClick = () => {
     navigate("/register_client"); // Redirige vers la page ViewGp
   };
   return (

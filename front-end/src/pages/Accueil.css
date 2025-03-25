@@ -1,20 +1,19 @@
 /* Réinitialisation de base */
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #00458b;
-  color: white;
-  overflow: hidden;
-}
 
 /* Effet de fade-in à l'entrée */
 .container {
-  max-width: 1200px;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #00458b;
+  color: rgb(255, 255, 255);
+  overflow: hidden;
+  width: 100%;
   margin: 0 auto;
   padding: 20px;
   opacity: 0;
   transform: translateY(-20px);
   transition: opacity 1s ease-out, transform 1s ease-out;
+  height: 100vh;
 }
 
 .container.fade-in {
