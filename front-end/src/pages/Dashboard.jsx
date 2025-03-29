@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import logo from "../assets/Capture d’écran 2025-03-23 à 15.05.00.png"; // Remplace par ton vrai chemin d'image
 import coteIvoireFlag from "../assets/civ.jpg";
 import senegalFlag from "../assets/sn.jpg";
-import "/Users/macretina/GP_PROJECT/front-end/src/pages/Dashboard.css";
+import "../pages/Dashboard.css";
 const Dashboard = () => {
   const [items, setItems] = useState([]);
   const navigate = useNavigate();
@@ -65,7 +65,14 @@ const Dashboard = () => {
 
   const handleGpClick = (gp) => {
     setSelectedGp(gp);
+    console.log(gp); // Affiche immédiatement le GP cliqué
   };
+
+  useEffect(() => {
+    if (selectedGp) {
+      console.log(selectedGp); // Affiche le GP après la mise à jour de l'état
+    }
+  }, [selectedGp]);
 
   const closeModal = () => {
     setSelectedGp(null);
@@ -158,7 +165,7 @@ const Dashboard = () => {
                 <p className="gp-price">PRIX : {item.prix_kilo} FCFA / KG</p>
                 <div className="gp-separator1"></div>
                 <p className="gp-date">
-                  Date de départ: className="datee"
+                  Date de départ:
                   {new Date(item.date_depart).toLocaleDateString()}
                 </p>
                 <div className="gp-separator2"></div>
@@ -262,7 +269,7 @@ const Dashboard = () => {
               {activeTab === "clients" && (
                 <div className="modal-clients">
                   <h2>Clients Acceptés</h2>
-                  {selectedGp.clients && selectedGp.clients.map > 0 ? (
+                  {selectedGp.client && selectedGp.client.length > 0 ? ( // Correction ici
                     <table className="gp-table">
                       <thead>
                         <tr>
@@ -275,7 +282,7 @@ const Dashboard = () => {
                         </tr>
                       </thead>
                       <tbody>
-                        {selectedGp.clients.map((client) => (
+                        {selectedGp.client.map((client) => (
                           <tr key={client._id}>
                             <td>{client.nom}</td>
                             <td>{client.prenom}</td>
