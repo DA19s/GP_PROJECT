@@ -1,11 +1,11 @@
 import { Route, Routes } from "react-router-dom";
 import Accueil from "./pages/Accueil";
 import AuthForm from "./pages/AuthForm"; // Importation de AuthForm
+import Create from "./pages/create_gp";
 import Dashboard from "./pages/Dashboard";
 import DashboardClient from "./pages/DashboardClient";
-import SignupClient from "./pages/SignupClient";
-import Create from "./pages/create_gp";
 import Login from "./pages/Login";
+import SignupClient from "./pages/SignupClient";
 import Update from "./pages/update";
 import Verify_client from "./pages/verify_client";
 import Verify_user from "./pages/verify_user";
@@ -32,7 +32,7 @@ function App() {
           <Route path="/dashClient" element={<DashboardClient />} />
           <Route path="/client/:id" element={<SignupClient />} />
           <Route path="/update/:id" element={<Update />} />
-          <Route path="/viewGp/:id" element={<ViewGp />} />
+          <Route path="/viewGp" element={<ViewGp />} />
           <Route path="/viewAsk/:id" element={<ViewAsk />} />
           <Route path="/" element={<Accueil />} />
         </Routes>

@@ -1,26 +1,557 @@
-.client-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 10px;
+/* Style général */
+.corp {
+  background-color: #1f4a8a;
+  width: 100vw;
+  height: 100vh;
 }
-
-.client-table th,
-.client-table td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
-
-.client-table th {
+/* Header */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   background-color: #00458b;
+  padding: 10px 20px;
   color: white;
+}
+
+/* Logo */
+.header-logo {
+  height: 50px;
+  border-radius: 5px;
+}
+
+/* Menu utilisateur */
+.user-menu {
+  position: relative;
+  cursor: pointer;
+}
+
+.user-menu svg {
+  transition: transform 0.3s ease;
+}
+
+.user-menu:hover svg {
+  transform: scale(1.1);
+}
+.user-dropdown {
+  position: absolute;
+  right: 0;
+  background: white;
+  color: black;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  overflow: hidden;
+  width: 200px;
+  z-index: 10;
+}
+.user-dropdown p {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.user-dropdown p:hover {
+  background: #f0f0f0;
+}
+
+/* Déconnexion */
+.logout {
+  color: red;
   font-weight: bold;
 }
 
-.client-table tr:nth-child(even) {
-  background-color: #f2f2f2;
+.gp-container {
+  background-color: #1f4a8a; /* Bleu de fond */
+  min-height: 100vh;
+  padding: 20px;
+  text-align: center;
 }
 
-.client-table tr:hover {
-  background-color: #ddd;
+/* Logo */
+.gp-logo {
+  width: 250px; /* Ajuste selon ton logo */
+  height: auto;
+  display: block;
+  margin: 0 auto 20px auto;
+  border-radius: 10px;
+}
+
+/* Titre */
+.gp-title {
+  color: white;
+  font-size: 24px;
+  margin-bottom: 20px;
+  left: 450px;
+  position: relative;
+}
+
+/* Liste des groupages */
+.gp-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+/* Carte de groupage */
+.gp-card {
+  background-color: white;
+  width: 320px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: 2px solid #6c8ebf;
+}
+
+/* En-tête de la carte */
+.gp-header {
+  background-color: #6c8ebf;
+  color: black;
+  padding: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  height: 30px;
+}
+
+/* Contenu de la carte */
+.gp-body {
+  padding: 15px;
+  text-align: center;
+}
+
+/* Séparateur */
+.gp-separator1 {
+  width: 100%;
+  height: 2px;
+  background-color: #2f2f2f;
+
+  position: relative;
+  bottom: 20px;
+}
+.gp-separator2 {
+  width: 100%;
+  height: 2px;
+  background-color: #1e1e1e;
+
+  position: relative;
+  bottom: 30px;
+}
+
+/* Informations sur le trajet */
+.gp-route {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 10px 0;
+}
+
+.gp-country {
+  text-align: center;
+  position: relative;
+  bottom: 20px;
+}
+
+.gp-country-name {
+  font-weight: bold;
+}
+
+.gp-flag {
+  width: 50px;
+  height: 35px;
+  border-radius: 5px;
+}
+
+.gp-city {
+  font-size: 12px;
+}
+
+.gp-arrow {
+  font-size: 24px;
+  color: #1f4a8a;
+  rotate: 45deg;
+  position: relative;
+  bottom: 10px;
+}
+
+/* Prix */
+.gp-price {
+  background-color: #337bed;
+  color: white;
+  padding: 8px;
+  border-radius: 5px;
+  font-weight: bold;
+  display: inline-block;
+  margin-top: 10px;
+  position: relative;
+  bottom: 20px;
+  width: 190px;
+}
+
+/* Date */
+.gp-date {
+  font-weight: bold;
+  margin-top: 10px;
+  position: relative;
+  bottom: 20px;
+}
+.datee {
+  position: relative;
+  bottom: 10px;
+}
+
+/* Bouton */
+.gp-button {
+  background-color: #4c79b3;
+  color: white;
+  padding: 10px;
+  width: 100%;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 0 0 10px 10px;
+}
+
+.gp-button:hover {
+  background-color: #3a5f8c;
+}
+/* Flou de fond quand la modal est ouverte */
+.blur-background {
+  filter: blur(0px);
+  transition: filter 0.3s ease-in-out;
+}
+
+/* Modal Overlay (fond sombre) */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 50px;
+}
+
+/* Contenu de la modal */
+.modal-content {
+  background: white;
+  padding: 20px;
+  width: 500px;
+  border-radius: 10px;
+  text-align: center;
+  position: relative;
+  animation: slideDown 0.3s ease-in-out;
+}
+
+/* Animation d'apparition */
+@keyframes slideDown {
+  from {
+    transform: translateY(-100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Bouton de fermeture */
+.modal-close {
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  position: absolute;
+  top: 1px;
+  right: 10px;
+}
+
+.modal-close:hover {
+  background: darkred;
+}
+
+/* Navigation entre détails et formulaire */
+.modal-nav {
+  display: flex;
+  justify-content: space-around;
+
+  margin-bottom: 10px;
+}
+
+.modal-nav button {
+  padding: 10px;
+  cursor: pointer;
+  border: 1px solid black;
+  width: 150px;
+  position: relative;
+  font-size: 17px;
+  border-radius: 7px;
+  background-color: #003366;
+  color: white;
+}
+
+.modal-nav button.active {
+  border-bottom: 3px solid #ff6600;
+  font-weight: bold;
+  background-color: #6c8ebf;
+}
+
+/* Formulaire */
+.modal-form input {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+/* Conten/* Conteneur principal */
+
+/* Titre principal */
+.modal-details h2 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #00458b;
+  margin-bottom: 15px;
+  border-bottom: 3px solid #00458b;
+  padding-bottom: 10px;
+}
+
+/* Nom du groupage */
+.gp-name {
+  font-size: 22px;
+  font-weight: bold;
+  color: #003366;
+  margin-bottom: 15px;
+}
+
+/* Tableau */
+.gp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+/* En-têtes du tableau */
+.gp-table th {
+  background: #00458b;
+  color: white;
+  text-align: left;
+  padding: 12px;
+  font-weight: bold;
+  width: 40%;
+}
+
+/* Contenu des cellules */
+.gp-table td {
+  background: #e6effc;
+  padding: 12px;
+  color: #333;
+  font-weight: bold;
+}
+
+/* Alternance des couleurs */
+.gp-table tr:nth-child(even) td {
+  background: #f3f7fc;
+}
+
+/* Effet au survol */
+.gp-table tr:hover td {
+  background: #c3dafc;
+  transition: 0.3s;
+}
+
+/* Bouton Soumettre */
+.submit-btn {
+  margin-top: 20px;
+  background: #00458b;
+  color: white;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+  position: relative;
+}
+
+.submit-btn:hover {
+  background: #003366;
+}
+button.gp-button1 {
+  position: relative;
+  border: 1px solid rgb(179, 176, 176);
+  width: 200px;
+  height: 40px;
+  border-radius: 5px;
+  background: #337bed;
+  color: white;
+  font-size: 17px;
+  bottom: 30px;
+  cursor: pointer;
+  left: 60px;
+}
+button.gp-button1:hover {
+  background-color: #1f4a8a;
+}
+.LAB {
+  position: relative;
+  right: 178px;
+}
+.LAB2 {
+  position: relative;
+  right: 189px;
+}
+.nput1 {
+  position: relative;
+  right: 10px;
+}
+.nput2 {
+  position: relative;
+  right: 10px;
+}
+/* Conteneur des icônes sous le bouton "Inscrire son GP" */
+.gp-icons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  position: relative;
+  left: 30px;
+}
+
+/* Style des icônes */
+.gp-icon {
+  font-size: 20px;
+
+  cursor: pointer;
+  position: relative; /* Nécessaire pour afficher le texte au survol */
+  transition: color 0.3s ease;
+  left: 120px;
+  bottom: 10px;
+}
+
+/* Icône de suppression */
+.gp-icon-delete {
+  color: #ff5722;
+}
+.gp-icons-voir {
+  position: relative;
+  color: #337bed;
+}
+.gp-icon-edit {
+  position: relative;
+  right: 30px;
+  color: #4caf50;
+}
+
+.gp-icon-delete:hover {
+  color: #f44336;
+}
+
+.gp-icons span {
+  display: none;
+  position: absolute;
+  background-color: #333;
+  color: white;
+  font-size: 12px;
+  padding: 5px;
+  border-radius: 4px;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  z-index: 10;
+}
+
+.gp-icon:hover + span {
+  display: block;
+}
+
+.gp-icon-view + span {
+  content: "Voir les détails du GP";
+}
+
+/* Texte pour l'icône "Modifier" */
+.gp-icon-edit + span {
+  content: "Modifier les informations du GP";
+}
+
+/* Texte pour l'icône "Supprimer" */
+.gp-icon-delete + span {
+  content: "Supprimer ce GP";
+}
+/* Styles de la section des clients acceptés */
+.clients-accepted-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #ffffff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.clients-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.clients-table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow-x: auto;
+}
+
+.clients-table thead {
+  background-color: #007bff;
+  color: white;
+}
+
+.clients-table th,
+.clients-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.clients-table tbody tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+.clients-table tbody tr:hover {
+  background-color: #e9ecef;
+  transition: 0.3s;
+}
+
+.status-approved {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.status-pending {
+  color: #ffc107;
+  font-weight: bold;
+}
+
+.status-rejected {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .clients-table th,
+  .clients-table td {
+    padding: 10px;
+    font-size: 14px;
+  }
 }

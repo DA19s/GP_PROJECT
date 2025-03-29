@@ -1,94 +1,303 @@
-import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { LogOut, Package, PlusCircle, User } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { FaEdit, FaEye, FaTrash } from "react-icons/fa"; // Import des icônes
 import { useNavigate } from "react-router-dom";
-
+import logo from "../assets/Capture d’écran 2025-03-23 à 15.05.00.png"; // Remplace par ton vrai chemin d'image
+import coteIvoireFlag from "../assets/civ.jpg";
+import senegalFlag from "../assets/sn.jpg";
+import "/Users/macretina/GP_PROJECT/front-end/src/pages/Dashboard.css";
 const Dashboard = () => {
-    const navigate = useNavigate();
-    const [items, setItems] = useState([]);
-    const token = sessionStorage.getItem('token'); 
-    useEffect(() => {
-        axios.get('http://localhost:3000/api/gp/gpo',{
-            headers: { Authorization: `Bearer ${token}` },
-            withCredentials: true,
-        })
-            .then((response) => {
-                console.log(response.data);
-                setItems(response.data);
-            })
-            .catch((error) => {
-                console.error('Erreur de connexion', error);
-            });
-    }, []);
+  const [items, setItems] = useState([]);
+  const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [selectedGp, setSelectedGp] = useState(null);
+  const [activeTab, setActiveTab] = useState("details");
+  const token = sessionStorage.getItem("token");
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/api/gp/gpo", {
+        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
+      })
+      .then((response) => {
+        console.log(response.data);
+        setItems(response.data);
+      })
+      .catch((error) => {
+        console.error("Erreur de connexion", error);
+      });
+  }, []);
 
-    const handleLogout = () => {
-        localStorage.removeItem('jwt');
-        navigate('/login');
-    };
-    
-    const creategp = () => {
-        navigate('/create_gp');
-    };
-    
-    const updateGp = (id) => {
-        navigate(`/update/${id}`);
-    };
-    
-    const viewAsk = (id) => {
-        navigate(`/viewAsk/${id}`);
-    };
+  const handleLogout = () => {
+    localStorage.removeItem("jwt");
+    navigate("/login");
+  };
 
-    const deleteGp = async (id) => {
-        try {
-          const response = await axios.delete(`http://localhost:3000/api/gp/${id}`, { withCredentials: true})
-          console.log(response);
-          setItems(items.filter(item => item._id !== id));
-          localStorage.setItem('token', response.data.token)
-          console.log(response.data.token);
-          
-        } catch (error) {
-          console.error('Erreur de connexion', error);
-          
-          
-        }
-      }
+  const creategp = () => {
+    navigate("/create_gp");
+  };
 
-    return (
-        <div>
-            <h1>Dashboard</h1>
-            <button onClick={handleLogout}>Se déconnecter</button>
-            <button onClick={creategp}>Creer un gp</button>
+  //const updateGp = (id) => {
+  // navigate(`/update/${id}`)
+  //};
 
-            {items.map(item => (
-                <div key={item._id}>
-                    <h2>Nom: {item.gp_name}</h2>
-                    <p>Propriétaire: {item.owner}</p>
-                    <p>Numéro: {item.owner_number}</p>
-                    <p>Départ: {item.ville_depart}, {item.pays_depart}</p>
-                    <p>Destination: {item.ville_destination}, {item.pays_destination}</p>
-                    <p>Capacité: {item.capacite} kg</p>
-                    <p>Poids restant: {item.poid_restant} kg</p>
-                    <p>Date de départ: {new Date(item.date_depart).toLocaleDateString()}</p>
-                    <p>Date d'arrivée: {new Date(item.date_arrive).toLocaleDateString()}</p>
-                    <p>Prix par kilo: {item.prix_kilo} XOF</p>
-                    <h3>Clients:</h3>
-                    <ul>
-                        {item.client && item.client.map(client => (
-                            <li key={client._id}><p>Nom:{client.nom}</p>
-                            <p>Prenom: {client.prenom}</p>
-                            <p>Pays: {client.pays}</p>
-                            <p>Ville: {client.ville}</p>
-                            <p>Poids du colis: {client.poid_colis}</p>
-                            <p>Numero: {client.number}</p>
-                        </li>
-                        ))}
-                    </ul>
-                    <button onClick={() => viewAsk(item._id)}>Demandes</button>
-                    <button onClick={() => updateGp(item._id)}>Modifier</button>
-                    <button onClick={() => deleteGp(item._id)}>Supprimer</button>
-                </div>
-            ))}
+  const viewAsk = (id) => {
+    console.log(id);
+
+    navigate(`/viewAsk/${id}`);
+  };
+
+  const deleteGp = async (id) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:3000/api/gp/${id}`,
+        { withCredentials: true }
+      );
+      console.log(response);
+      setItems(items.filter((item) => item._id !== id));
+      localStorage.setItem("token", response.data.token);
+      console.log(response.data.token);
+    } catch (error) {
+      console.error("Erreur de connexion", error);
+    }
+  };
+
+  const handleGpClick = (gp) => {
+    setSelectedGp(gp);
+  };
+
+  const closeModal = () => {
+    setSelectedGp(null);
+  };
+
+  return (
+    <div className="corp">
+      {/* Header */}
+      <header className="dashboard-header">
+        <img src={logo} alt="Logo" className="header-logo" />
+        <div className="user-menu">
+          <User size={30} onClick={() => setMenuOpen(!menuOpen)} />
+          {menuOpen && (
+            <div className="user-dropdown">
+              <p onClick={() => viewAsk(items._id)}>
+                {" "}
+                <Package size={16} /> Voir mes demandes
+              </p>
+              <p onClick={() => navigate("/my_packages")}>
+                {" "}
+                <Package size={16} /> Mes colis créés
+              </p>
+              <p onClick={() => creategp()}>
+                {" "}
+                <PlusCircle size={16} /> Créer un colis
+              </p>
+              <p onClick={handleLogout} className="logout">
+                {" "}
+                <LogOut size={16} /> Déconnexion
+              </p>
+            </div>
+          )}
         </div>
-    );
+      </header>
+
+      <div className="dashboard-container">
+        <h1 className="gp-title">MES GROUPAGES DISPONIBLES</h1>
+        <div className="gp-list">
+          {items.map((item) => (
+            <div key={item._id} className="gp-card">
+              <div className="gp-header">
+                {item.gp_name}
+                <div className=" gp-icon gp-icons-voir">
+                  <FaEye
+                    title="Voir"
+                    className="gp-icon"
+                    onClick={() => viewAsk(item._id)}
+                  />
+                  <FaEdit
+                    title="Modifier"
+                    className=" gp-icon gp-icon-edit"
+                    onClick={() => navigate(`/gp/edit/${item._id}`)}
+                  />
+                  <FaTrash
+                    title="Supprimer"
+                    className="gp-icon gp-icon-delete"
+                    onClick={() => deleteGp(items._id)}
+                  />
+                </div>
+              </div>
+
+              <div className="gp-body">
+                <div className="gp-route">
+                  <div className="gp-country">
+                    <p className="gp-country-name">{item.pays_depart}</p>
+                    <img
+                      src={senegalFlag}
+                      alt="Drapeau Sénégal"
+                      className="gp-flag"
+                    />
+                    <p className="gp-city">
+                      {item.ville_depart}, {item.pays_depart}
+                    </p>
+                  </div>
+                  <span className="gp-arrow">✈️</span>
+                  <div className="gp-country">
+                    <p className="gp-country-name">{item.pays_destination}</p>
+                    <img
+                      src={coteIvoireFlag}
+                      alt="Drapeau Côte d'Ivoire"
+                      className="gp-flag"
+                    />
+                    <p className="gp-city">
+                      {item.ville_destination}, {item.pays_destination}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="gp-separator1"></div>
+                <p className="gp-price">PRIX : {item.prix_kilo} FCFA / KG</p>
+                <div className="gp-separator1"></div>
+                <p className="gp-date">
+                  Date de départ: className="datee"
+                  {new Date(item.date_depart).toLocaleDateString()}
+                </p>
+                <div className="gp-separator2"></div>
+              </div>
+              <button
+                className="gp-button1"
+                onClick={() => handleGpClick(item)}
+              >
+                VOIR...
+              </button>
+            </div>
+          ))}
+        </div>
+        {selectedGp && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <button className="modal-close" onClick={closeModal}>
+                ✖
+              </button>
+
+              {/* Onglets de navigation */}
+              <div className="modal-nav">
+                <button
+                  className={activeTab === "details" ? "active" : ""}
+                  onClick={() => setActiveTab("details")}
+                >
+                  Détails du GP
+                </button>
+                <button
+                  className={activeTab === "clients" ? "active" : ""}
+                  onClick={() => setActiveTab("clients")}
+                >
+                  Clients Acceptés
+                </button>
+              </div>
+
+              {/* Affichage du contenu en fonction de l'onglet actif */}
+              {activeTab === "details" && (
+                <div className="modal-details">
+                  <h2>Les informations du GP</h2>
+                  <table className="gp-table">
+                    <tbody>
+                      <tr>
+                        <th>Nom</th>
+                        <td>{selectedGp.gp_name}</td>
+                      </tr>
+                      <tr>
+                        <th>Propriétaire</th>
+                        <td>{selectedGp.owner}</td>
+                      </tr>
+                      <tr>
+                        <th>Numéro</th>
+                        <td>{selectedGp.owner_number}</td>
+                      </tr>
+                      <tr>
+                        <th>Départ</th>
+                        <td>
+                          {selectedGp.ville_depart}, {selectedGp.pays_depart}
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Destination</th>
+                        <td>
+                          {selectedGp.ville_destination},{" "}
+                          {selectedGp.pays_destination}
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Capacité</th>
+                        <td>{selectedGp.capacite} kg</td>
+                      </tr>
+                      <tr>
+                        <th>Poids restant</th>
+                        <td>{selectedGp.poid_restant} kg</td>
+                      </tr>
+                      <tr>
+                        <th>Date de départ</th>
+                        <td>
+                          {new Date(
+                            selectedGp.date_depart
+                          ).toLocaleDateString()}
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Date d'arrivée</th>
+                        <td>
+                          {new Date(
+                            selectedGp.date_arrive
+                          ).toLocaleDateString()}
+                        </td>
+                      </tr>
+                      <tr>
+                        <th>Prix par kilo</th>
+                        <td>{selectedGp.prix_kilo} FCFA</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {activeTab === "clients" && (
+                <div className="modal-clients">
+                  <h2>Clients Acceptés</h2>
+                  {selectedGp.clients && selectedGp.clients.map > 0 ? (
+                    <table className="gp-table">
+                      <thead>
+                        <tr>
+                          <th>Nom</th>
+                          <th>Prénom</th>
+                          <th>Pays</th>
+                          <th>Ville</th>
+                          <th>Poids du colis</th>
+                          <th>Numéro</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {selectedGp.clients.map((client) => (
+                          <tr key={client._id}>
+                            <td>{client.nom}</td>
+                            <td>{client.prenom}</td>
+                            <td>{client.pays}</td>
+                            <td>{client.ville}</td>
+                            <td>{client.poid_colis} kg</td>
+                            <td>{client.number}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  ) : (
+                    <p>Aucun client accepté pour ce groupage.</p>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default Dashboard;

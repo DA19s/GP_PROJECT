@@ -25,7 +25,7 @@ export default function AuthForm() {
           "Authorization"
         ] = `Bearer ${response.data.token}`;
         console.log("Token reçu:", response.data.token);
-        navigate("/dashClient");
+        navigate("/viewGp");
       } else {
         console.error("Erreur: Aucun token reçu.");
       }
