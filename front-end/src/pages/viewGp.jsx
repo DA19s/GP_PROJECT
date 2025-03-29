@@ -14,6 +14,7 @@ const ViewGp = () => {
   const [activeTab, setActiveTab] = useState("details");
   const [colisType, setColisType] = useState("");
   const [colisPoids, setColisPoids] = useState("");
+  const [gp_name, setGp_name] = useState("");
   const { id } = useParams();
   const token = sessionStorage.getItem("token");
 
@@ -39,10 +40,30 @@ const ViewGp = () => {
   const closeModal = () => {
     setSelectedGp(null);
   };
+ /* const handlegp = () => {
+    navigate(`/client/${id}`);
+  };
+*/
+  const handleSignupClient = async (e) => {
+    //e.preventDefault();
+    const token = sessionStorage.getItem('token'); 
+    console.log('Token récupéré depuis le cookie :', token);
+    try {
+        const response = await axios.post(`http://localhost:3000/api/temp/create`, {gp_name, poid_colis: colisPoids }, {
+            headers: { Authorization: `Bearer ${token}` },
+            withCredentials: true,
+        });
+        navigate('/dashClient');
+    } catch (error) {
+        if (error.response && error.response.data && error.response.data.error === "Duplicate field value entered") {
+            setErrorMessage("Le numéro est déjà utilisé. Veuillez en saisir un autre.");
+        } else {
+            setErrorMessage("Erreur de connexion. Veuillez réessayer.");
+        }
+        console.error('Erreur de connexion', error);
+    }
+};
 
-  //const handlegp = () => {
-  //navigate(`/client/${id}`);
-  //};
 
   return (
     <div className="gp-container">
@@ -84,9 +105,9 @@ const ViewGp = () => {
               <div className="gp-separator1"></div>
               <p className="gp-date">
                 Date de départ:{" "}
-                <p className="datee">
+                <span className="datee">
                   {new Date(item.date_depart).toLocaleDateString()}
-                </p>
+                </span>
               </p>
               <div className="gp-separator2"></div>
             </div>
@@ -191,6 +212,15 @@ const ViewGp = () => {
               <div className="modal-form">
                 <h2>Mettre les Informations de votre GP</h2>
                 <form>
+                   <label className="LAB2">Nom du GP:</label>
+                  <input
+                    className="nput3"
+                    type="text"
+                    placeholder="Nom"
+                    value={gp_name}
+                    onChange={(e) => setGp_name(e.target.value)}
+                    required
+                  />
                   <label className="LAB">Quelle est votre colis? :</label>
                   <input
                     className="nput1"
@@ -201,7 +231,7 @@ const ViewGp = () => {
                     required
                   />
 
-                  <label className="LAB2">Poids du colis (kg) :</label>
+                    <label className="LAB2">Poids du colis (kg) :</label>
                   <input
                     className="nput2"
                     type="number"
@@ -211,7 +241,10 @@ const ViewGp = () => {
                     required
                   />
 
-                  <button type="submit" className="gp-button">
+
+                  <button onClick={() => handleSignupClient(gp_name, colisType)}
+              className="signupClient"
+                   type="submit">
                     Soumettre
                   </button>
                 </form>

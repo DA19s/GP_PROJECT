@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "/Users/macretina/GP_PROJECT/front-end/src/pages/AuthForm.css";
+import "../pages/AuthForm.css";
 export default function AuthForm() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");

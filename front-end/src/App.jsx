@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import DashboardClient from "./pages/DashboardClient";
 import SignupClient from "./pages/SignupClient";
 import Create from "./pages/create_gp";
+import Login from "./pages/Login";
 import Update from "./pages/update";
 import Verify_client from "./pages/verify_client";
 import Verify_user from "./pages/verify_user";
@@ -18,6 +19,7 @@ function App() {
         <Routes>
           {/* Route unique pour AuthForm, elle s'adapte à l'état (connexion ou inscription) */}
           <Route path="/auth" element={<AuthForm />} />
+          <Route path="/login" element={<Login />} />
           {/* Routes pour les autres pages */}
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/create_gp" element={<Create />} />
