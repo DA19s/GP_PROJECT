@@ -1,0 +1,26 @@
+.client-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.client-table th,
+.client-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.client-table th {
+  background-color: #00458b;
+  color: white;
+  font-weight: bold;
+}
+
+.client-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.client-table tr:hover {
+  background-color: #ddd;
+}

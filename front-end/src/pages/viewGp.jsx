@@ -19,7 +19,7 @@ const ViewGp = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/api/gp/gpg/${id}`, {
+      .get(`http://localhost:3000/api/gp`, {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       })
@@ -39,9 +39,10 @@ const ViewGp = () => {
   const closeModal = () => {
     setSelectedGp(null);
   };
-  const handlegp = () => {
-    navigate(`/client/${id}`);
-  };
+
+  //const handlegp = () => {
+  //navigate(`/client/${id}`);
+  //};
 
   return (
     <div className="gp-container">
