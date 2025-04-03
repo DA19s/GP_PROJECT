@@ -2,10 +2,12 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../pages/AuthForm.css";
-export default function AuthForm() {
+
+export default function AuthForm2() {
   const [isSignUp, setIsSignUp] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [pseudo, setPseudo] = useState("");
   const [nom, setNom] = useState("");
   const [prenom, setPrenom] = useState("");
   const [number, setNumber] = useState("");
@@ -13,10 +15,9 @@ export default function AuthForm() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/cli/login",
+        "http://localhost:3000/api/user/login",
         { email, password },
         { withCredentials: true }
       );
@@ -26,7 +27,7 @@ export default function AuthForm() {
           "Authorization"
         ] = `Bearer ${response.data.token}`;
         console.log("Token reçu:", response.data.token);
-        navigate("/viewGp");
+        navigate("/dashboard");
       } else {
         console.error("Erreur: Aucun token reçu.");
       }
@@ -39,12 +40,11 @@ export default function AuthForm() {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/cli/register",
-        { nom, prenom, email, number, password },
+        "http://localhost:3000/api/user/register",
+        { pseudo, nom, prenom, email, number, password },
         { withCredentials: true }
       );
-      localStorage.setItem("token", response.data.token);
-      navigate(`/verify_client/${email}`);
+      navigate(`/verify_user/${email}`);
     } catch (error) {
       console.error("Erreur de connexion", error);
     }
@@ -55,7 +55,7 @@ export default function AuthForm() {
       <div className={`cont ${isSignUp ? "s--signup" : ""}`}>
         {/* Form Login */}
         <div className="form sign-in">
-          <h2>SE CONNECTER</h2>
+          <h2>SE CONNECTER (Admin)</h2>
           <form onSubmit={handleLogin}>
             <label>
               <span>Email</span>
@@ -100,10 +100,19 @@ export default function AuthForm() {
 
           {/* Form Signup */}
           <div className="form sign-up">
-            <h2>Créer Votre Compte</h2>
+            <h2>Créer Votre Compte (Admin)</h2>
             <form onSubmit={handleSignup}>
               <label>
-                <span>Name</span>
+                <span>Pseudo</span>
+                <input
+                  type="text"
+                  placeholder="Pseudo"
+                  value={pseudo}
+                  onChange={(e) => setPseudo(e.target.value)}
+                />
+              </label>
+              <label>
+                <span>Nom</span>
                 <input
                   type="text"
                   placeholder="Nom"
@@ -112,7 +121,7 @@ export default function AuthForm() {
                 />
               </label>
               <label>
-                <span>First Name</span>
+                <span>Prénom</span>
                 <input
                   type="text"
                   placeholder="Prenom"
@@ -130,10 +139,10 @@ export default function AuthForm() {
                 />
               </label>
               <label>
-                <span>Phone Number</span>
+                <span>Numéro de téléphone</span>
                 <input
                   type="text"
-                  placeholder="Number"
+                  placeholder="Numéro"
                   value={number}
                   onChange={(e) => setNumber(e.target.value)}
                 />

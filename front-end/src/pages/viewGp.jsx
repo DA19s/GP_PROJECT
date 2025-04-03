@@ -2,8 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import logo from "../assets/Capture d’écran 2025-03-23 à 15.05.00.png";
 import coteIvoireFlag from "../assets/civ.jpg";
+import logo from "../assets/logoo.png";
 import senegalFlag from "../assets/sn.jpg";
 import "../pages/viewGp.css";
 
@@ -40,35 +40,48 @@ const ViewGp = () => {
   const closeModal = () => {
     setSelectedGp(null);
   };
- /* const handlegp = () => {
+  /* const handlegp = () => {
     navigate(`/client/${id}`);
   };
 */
   const handleSignupClient = async (e) => {
     //e.preventDefault();
-    const token = sessionStorage.getItem('token'); 
-    console.log('Token récupéré depuis le cookie :', token);
+    const token = sessionStorage.getItem("token");
+    console.log("Token récupéré depuis le cookie :", token);
     try {
-        const response = await axios.post(`http://localhost:3000/api/temp/create`, {gp_name, poid_colis: colisPoids }, {
-            headers: { Authorization: `Bearer ${token}` },
-            withCredentials: true,
-        });
-        navigate('/dashClient');
-    } catch (error) {
-        if (error.response && error.response.data && error.response.data.error === "Duplicate field value entered") {
-            setErrorMessage("Le numéro est déjà utilisé. Veuillez en saisir un autre.");
-        } else {
-            setErrorMessage("Erreur de connexion. Veuillez réessayer.");
+      const response = await axios.post(
+        `http://localhost:3000/api/temp/create`,
+        { gp_name, poid_colis: colisPoids },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,
         }
-        console.error('Erreur de connexion', error);
+      );
+      navigate("/dashClient");
+    } catch (error) {
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.error === "Duplicate field value entered"
+      ) {
+        setErrorMessage(
+          "Le numéro est déjà utilisé. Veuillez en saisir un autre."
+        );
+      } else {
+        setErrorMessage("Erreur de connexion. Veuillez réessayer.");
+      }
+      console.error("Erreur de connexion", error);
     }
-};
-
+  };
 
   return (
     <div className="gp-container">
       <img src={logo} alt="Logo" className="gp-logo" />
-      <h1 className="gp-title">LES GROUPAGES DISPONIBLES</h1>
+      <h1 className="gp-title">
+        {items.length === 0
+          ? "PAS DE GROUPAGES DISPONIBLES"
+          : "LES GROUPAGES DISPONIBLES"}
+      </h1>
       <div className="gp-list">
         {items.map((item) => (
           <div key={item._id} className="gp-card">
@@ -102,14 +115,10 @@ const ViewGp = () => {
 
               <div className="gp-separator1"></div>
               <p className="gp-price">PRIX : {item.prix_kilo} FCFA / KG</p>
-              <div className="gp-separator1"></div>
-              <p className="gp-date">
-                Date de départ:{" "}
-                <span className="datee">
-                  {new Date(item.date_depart).toLocaleDateString()}
-                </span>
-              </p>
               <div className="gp-separator2"></div>
+              <p className="gp-date">Date de départ </p>
+              <span>{new Date(item.date_depart).toLocaleDateString()}</span>
+              <div className="gp-separator3"></div>
             </div>
             <button className="gp-button1" onClick={() => handleGpClick(item)}>
               INSCRIRE SON GP
@@ -212,7 +221,7 @@ const ViewGp = () => {
               <div className="modal-form">
                 <h2>Mettre les Informations de votre GP</h2>
                 <form>
-                   <label className="LAB2">Nom du GP:</label>
+                  <label className="LAB2">Nom du GP:</label>
                   <input
                     className="nput3"
                     type="text"
@@ -231,7 +240,7 @@ const ViewGp = () => {
                     required
                   />
 
-                    <label className="LAB2">Poids du colis (kg) :</label>
+                  <label className="LAB2">Poids du colis (kg) :</label>
                   <input
                     className="nput2"
                     type="number"
@@ -241,10 +250,11 @@ const ViewGp = () => {
                     required
                   />
 
-
-                  <button onClick={() => handleSignupClient(gp_name, colisType)}
-              className="signupClient"
-                   type="submit">
+                  <button
+                    onClick={() => handleSignupClient(gp_name, colisType)}
+                    className="signupClient"
+                    type="submit"
+                  >
                     Soumettre
                   </button>
                 </form>

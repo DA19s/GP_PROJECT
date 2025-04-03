@@ -1,71 +1,109 @@
-import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { LogOut, Package, PlusCircle, User } from "lucide-react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import getCookie from './getCookie'
+import logo from "../assets/logoo.png";
+import "../pages/viewAsk.css";
 
-const viewAsk = () => {
-    const navigate = useNavigate();
-    const [items, setItems] = useState([]);
-    const {id} = useParams();
+const ViewAsk = () => {
+  const navigate = useNavigate();
+  const [items, setItems] = useState([]);
+  const { id } = useParams();
+  const [menuOpen, setMenuOpen] = useState(false);
 
-    console.log(id);
-    
+  useEffect(() => {
+    axios
+      .get(`http://localhost:3000/api/temp/tempo/${id}`, {
+        withCredentials: true,
+      })
+      .then((response) => {
+        setItems(response.data);
+      })
+      .catch((error) => {
+        console.error("Erreur de connexion", error);
+      });
+  }, [id]);
 
-    useEffect(() => {
-        const token = sessionStorage.getItem('token'); 
-        axios.get(`http://localhost:3000/api/temp/tempo/${id}`,{
-           withCredentials: true
-        })
-            .then((response) => {
-                console.log(response.data);
-                setItems(response.data);
-            })
-            .catch((error) => {
-                console.error('Erreur de connexion', error);
-            });
-    }, []);
-
-
-
-    const Add = async (id,id1) => {
-        try {
-            console.log(id);
-
-            console.log(id1);
-            const token = sessionStorage.getItem('token'); 
-
-          const response = await axios.put(`http://localhost:3000/api/client/${id}/${id1}`, {
-            headers: { Authorization: `Bearer ${token}` },
-            withCredentials: true,
-        });
-    navigate('/dashboard');
-          console.log(response.data.token);
-          
-        } catch (error) {
-          console.error('Erreur de connexion', error);
-          
-          
+  const Add = async (id, id1) => {
+    try {
+      const token = sessionStorage.getItem("token");
+      await axios.put(
+        `http://localhost:3000/api/client/${id}/${id1}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,
         }
-      }
+      );
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Erreur de connexion", error);
+    }
+  };
 
+  const handleLogout = () => {
+    localStorage.removeItem("jwt");
+    navigate("/login");
+  };
 
-    return (
-        <div>
-            <h1>Client</h1>
-
-            {items.map(item => (
-                <div key={item._id}>
-                    <h2>Nom: {item.nom}</h2>
-                    <p>Prenom: {item.prenom}</p>
-                    <p>Poid du colis: {item.poid_colis}</p>
-                    <p>Numero: {item.number} kg</p>
-                    <p>Prix : {item.prix} XOF</p>
-                    <button onClick={() => Add(id,item._id)}>Accepter</button>
-                </div>
-                
-            ))}
+  return (
+    <div className="corp">
+      {/* Header */}
+      <header className="dashboard-header">
+        <img src={logo} alt="Logo" className="header-logo" />
+        <div className="user-menu">
+          <User size={30} onClick={() => setMenuOpen(!menuOpen)} />
+          {menuOpen && (
+            <div className="user-dropdown">
+              <p onClick={() => navigate("/viewAsk")}>
+                <Package size={16} /> Voir mes demandes
+              </p>
+              <p onClick={() => navigate("/viewGp")}>
+                <Package size={16} /> Mes colis créés
+              </p>
+              <p onClick={() => navigate("/create_gp")}>
+                <PlusCircle size={16} /> Créer un colis
+              </p>
+              <p onClick={handleLogout} className="logout">
+                <LogOut size={16} /> Déconnexion
+              </p>
+            </div>
+          )}
         </div>
-    );
+      </header>
+
+      {/* Table des demandes */}
+      <h1 className="title">Demandes de Groupage</h1>
+      <div className="content">
+        <table className="colis-table">
+          <thead>
+            <tr>
+              <th>Nom</th>
+              <th>Prénom</th>
+              <th>Poids du colis (kg)</th>
+              <th>Numéro</th>
+              <th>Prix (XOF)</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((item) => (
+              <tr key={item._id}>
+                <td>{item.nom}</td>
+                <td>{item.prenom}</td>
+                <td>{item.poid_colis}</td>
+                <td>{item.number}</td>
+                <td>{item.prix}</td>
+                <td>
+                  <button onClick={() => Add(id, item._id)}>Accepter</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
 };
 
-export default viewAsk;
+export default ViewAsk;

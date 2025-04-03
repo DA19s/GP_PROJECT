@@ -1,10 +1,10 @@
 import axios from "axios";
 import { LogOut, Package, PlusCircle, User } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { FaEdit, FaEye, FaTrash } from "react-icons/fa"; // Import des icônes
+import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import logo from "../assets/Capture d’écran 2025-03-23 à 15.05.00.png"; // Remplace par ton vrai chemin d'image
 import coteIvoireFlag from "../assets/civ.jpg";
+import logo from "../assets/logoo.png"; // Remplace par ton vrai chemin d'image
 import senegalFlag from "../assets/sn.jpg";
 import "../pages/Dashboard.css";
 const Dashboard = () => {
@@ -109,30 +109,28 @@ const Dashboard = () => {
       </header>
 
       <div className="dashboard-container">
-        <h1 className="gp-title">MES GROUPAGES DISPONIBLES</h1>
+        <h1 className="gp-title2">MES GROUPAGES DISPONIBLES</h1>
         <div className="gp-list">
           {items.map((item) => (
             <div key={item._id} className="gp-card">
-              <div className="gp-header">
-                {item.gp_name}
-                <div className=" gp-icon gp-icons-voir">
-                  <FaEye
-                    title="Voir"
-                    className="gp-icon"
-                    onClick={() => viewAsk(item._id)}
-                  />
-                  <FaEdit
-                    title="Modifier"
-                    className=" gp-icon gp-icon-edit"
-                    onClick={() => navigate(`/gp/edit/${item._id}`)}
-                  />
-                  <FaTrash
-                    title="Supprimer"
-                    className="gp-icon gp-icon-delete"
-                    onClick={() => deleteGp(items._id)}
-                  />
-                </div>
+              <div className="gp-icons">
+                <FaEye
+                  title="Voir"
+                  className="gp-icon gp-icon-voir"
+                  onClick={() => viewAsk(item._id)}
+                />
+                <FaEdit
+                  title="Modifier"
+                  className=" gp-icon gp-icon-edit"
+                  onClick={() => navigate(`/gp/edit/${item._id}`)}
+                />
+                <FaTrash
+                  title="Supprimer"
+                  className="gp-icon gp-icon-delete"
+                  onClick={() => deleteGp(items._id)}
+                />
               </div>
+              <div className="gp2-header">{item.gp_name}</div>
 
               <div className="gp-body">
                 <div className="gp-route">
@@ -163,12 +161,10 @@ const Dashboard = () => {
 
                 <div className="gp-separator1"></div>
                 <p className="gp-price">PRIX : {item.prix_kilo} FCFA / KG</p>
-                <div className="gp-separator1"></div>
-                <p className="gp-date">
-                  Date de départ:
-                  {new Date(item.date_depart).toLocaleDateString()}
-                </p>
                 <div className="gp-separator2"></div>
+                <p className="gp-date">Date de départ</p>
+                <span>{new Date(item.date_depart).toLocaleDateString()}</span>
+                <div className="dashboard-separator3"></div>
               </div>
               <button
                 className="gp-button1"

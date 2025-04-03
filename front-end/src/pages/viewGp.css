@@ -1,6 +1,9 @@
 /* Style général */
+body {
+  width: 100vw;
+}
 .gp-container {
-  background-color: #1f4a8a; /* Bleu de fond */
+  background-color: #012e4f; /* Bleu de fond */
   min-height: 100vh;
   padding: 20px;
   text-align: center;
@@ -20,6 +23,9 @@
   color: white;
   font-size: 24px;
   margin-bottom: 20px;
+  position: relative;
+  top: 30px;
+  left: 40px;
 }
 
 /* Liste des groupages */
@@ -28,6 +34,8 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 20px;
+  position: relative;
+  top: 50px;
 }
 
 /* Carte de groupage */
@@ -38,6 +46,7 @@
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border: 2px solid #6c8ebf;
+  height: 360px;
 }
 
 /* En-tête de la carte */
@@ -47,6 +56,11 @@
   padding: 10px;
   font-size: 18px;
   font-weight: bold;
+  height: 40px;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 }
 
 /* Contenu de la carte */
@@ -67,10 +81,18 @@
 .gp-separator2 {
   width: 100%;
   height: 2px;
+  background-color: #2f2f2f;
+
+  position: relative;
+  bottom: 12px;
+}
+.gp-separator3 {
+  width: 100%;
+  height: 2px;
   background-color: #1e1e1e;
 
   position: relative;
-  bottom: 30px;
+  top: 10px;
 }
 
 /* Informations sur le trajet */
@@ -83,12 +105,13 @@
 
 .gp-country {
   text-align: center;
-  position: relative;
-  bottom: 20px;
 }
 
 .gp-country-name {
   font-weight: bold;
+  position: relative;
+  top: -10px;
+  left: 5px;
 }
 
 .gp-flag {
@@ -99,6 +122,9 @@
 
 .gp-city {
   font-size: 12px;
+  position: relative;
+  top: -5px;
+  left: 10px;
 }
 
 .gp-arrow {
@@ -120,7 +146,8 @@
   margin-top: 10px;
   position: relative;
   bottom: 20px;
-  width: 190px;
+  width: 220px;
+  left: 3px;
 }
 
 /* Date */
@@ -128,11 +155,14 @@
   font-weight: bold;
   margin-top: 10px;
   position: relative;
-  bottom: 20px;
+  left: 50px;
+  top: -10px;
 }
+
 .datee {
   position: relative;
-  bottom: 10px;
+  top: 30px;
+  right: 110px;
 }
 
 /* Bouton */
@@ -195,7 +225,7 @@
 
 /* Bouton de fermeture */
 .modal-close {
-  color: white;
+  color: rgb(83, 0, 0);
   padding: 5px 10px;
   border: none;
   border-radius: 5px;
@@ -203,10 +233,7 @@
   position: absolute;
   top: 1px;
   right: 10px;
-}
-
-.modal-close:hover {
-  background: darkred;
+  width: 30px;
 }
 
 /* Navigation entre détails et formulaire */
@@ -262,6 +289,7 @@
   font-weight: bold;
   color: #003366;
   margin-bottom: 15px;
+  position: relative;
 }
 
 /* Tableau */
@@ -328,8 +356,9 @@ button.gp-button1 {
   background: #337bed;
   color: white;
   font-size: 17px;
-  bottom: 30px;
+  top: 10px;
   cursor: pointer;
+  left: 10px;
 }
 button.gp-button1:hover {
   background-color: #1f4a8a;
@@ -349,4 +378,106 @@ button.gp-button1:hover {
 .nput2 {
   position: relative;
   right: 10px;
+}
+.signupClient {
+  position: relative;
+  border: 1px solid rgb(179, 176, 176);
+  width: 100px;
+  height: 40px;
+  border-radius: 5px;
+  background: #337bed;
+  color: white;
+  font-size: 17px;
+  top: 10px;
+  cursor: pointer;
+  left: 10px;
+}
+/* Styles pour la carte de succès */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.success-card {
+  background: white;
+  border-radius: 10px;
+  padding: 30px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.success-icon {
+  font-size: 50px;
+  color: #4caf50;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.success-message {
+  margin-bottom: 20px;
+}
+
+.payment-info {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 15px 0;
+}
+
+.payment-methods {
+  margin-top: 10px;
+}
+
+.method {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.method:last-child {
+  border-bottom: none;
+}
+
+.receipt-note {
+  font-style: italic;
+  color: #666;
+  margin-top: 15px;
+}
+
+.success-button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  width: 100%;
+  margin-top: 15px;
+}
+
+.success-button:hover {
+  background-color: #45a049;
+}
+
+.modal-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #777;
 }

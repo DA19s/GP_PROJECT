@@ -1,15 +1,15 @@
 /* Style général */
 .corp {
-  background-color: #1f4a8a;
+  background-color: #012e4f;
   width: 100vw;
-  height: 100vh;
+  height: 1000px;
 }
 /* Header */
 .dashboard-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #00458b;
+  background-color: #012e4f;
   padding: 10px 20px;
   color: white;
 }
@@ -79,10 +79,11 @@
 }
 
 /* Titre */
-.gp-title {
-  color: white;
+.gp-title2 {
+  color: rgb(255, 255, 255);
   font-size: 24px;
   margin-bottom: 20px;
+  top: 50px;
   left: 450px;
   position: relative;
 }
@@ -106,13 +107,14 @@
 }
 
 /* En-tête de la carte */
-.gp-header {
+.gp2-header {
   background-color: #6c8ebf;
   color: black;
   padding: 10px;
   font-size: 18px;
   font-weight: bold;
   height: 30px;
+  width: 100%;
 }
 
 /* Contenu de la carte */
@@ -138,7 +140,13 @@
   position: relative;
   bottom: 30px;
 }
-
+.dashboard-separator3 {
+  width: 100%;
+  height: 2px;
+  background-color: #1e1e1e;
+  position: relative;
+  top: 10px;
+}
 /* Informations sur le trajet */
 .gp-route {
   display: flex;
@@ -190,11 +198,17 @@
 }
 
 /* Date */
-.gp-date {
+p.gp-date {
   font-weight: bold;
   margin-top: 10px;
   position: relative;
   bottom: 20px;
+  left: 10px;
+}
+.gp-date span {
+  position: relative;
+  top: 30px;
+  right: 120px;
 }
 .datee {
   position: relative;
@@ -269,10 +283,6 @@
   position: absolute;
   top: 1px;
   right: 10px;
-}
-
-.modal-close:hover {
-  background: darkred;
 }
 
 /* Navigation entre détails et formulaire */
@@ -418,41 +428,32 @@ button.gp-button1:hover {
   right: 10px;
 }
 /* Conteneur des icônes sous le bouton "Inscrire son GP" */
-.gp-icons {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-  position: relative;
-  left: 30px;
-}
 
 /* Style des icônes */
-.gp-icon {
+.gp-icons {
   font-size: 20px;
-
+  color: #28a745;
   cursor: pointer;
   position: relative; /* Nécessaire pour afficher le texte au survol */
   transition: color 0.3s ease;
-  left: 120px;
-  bottom: 10px;
+  background-color: #6c8ebf;
 }
 
 /* Icône de suppression */
-.gp-icon-delete {
-  color: #ff5722;
-}
-.gp-icons-voir {
+.gp-icon.gp-icon-delete {
+  color: hsl(14, 100%, 57%);
+  left: 125px;
   position: relative;
-  color: #337bed;
 }
-.gp-icon-edit {
+.gp-icon.gp-icon-voir {
   position: relative;
-  right: 30px;
+  color: #009ed8;
+  left: 125px;
+}
+.gp-icon.gp-icon-edit {
+  position: relative;
+  left: 120px;
   color: #4caf50;
-}
-
-.gp-icon-delete:hover {
-  color: #f44336;
 }
 
 .gp-icons span {

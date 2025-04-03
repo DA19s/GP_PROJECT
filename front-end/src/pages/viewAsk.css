@@ -1,0 +1,38 @@
+h1.title {
+  position: relative;
+  top: 20px;
+  left: 450px;
+  color: white;
+}
+.colis-table {
+  width: 100%;
+  border-collapse: collapse;
+  position: relative;
+}
+
+.colis-table th {
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.colis-table td {
+  background-color: #d6eaf8;
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.colis-table button {
+  background-color: #28a745;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.colis-table button:hover {
+  background-color: #218838;
+}
