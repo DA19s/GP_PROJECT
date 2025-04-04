@@ -51,7 +51,7 @@ const ViewGp = () => {
     try {
       const response = await axios.post(
         `http://localhost:3000/api/temp/create`,
-        { gp_name, poid_colis: colisPoids },
+        { gp_name, poid_colis: colisPoids, colis: colisType },
         {
           headers: { Authorization: `Bearer ${token}` },
           withCredentials: true,
@@ -251,7 +251,7 @@ const ViewGp = () => {
                   />
 
                   <button
-                    onClick={() => handleSignupClient(gp_name, colisType)}
+                    onClick={() => handleSignupClient(gp_name, colisType, colisPoids)}
                     className="signupClient"
                     type="submit"
                   >

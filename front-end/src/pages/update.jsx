@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import "/Users/macretina/GP_PROJECT/front-end/src/pages/create_gp.css";
+import "../pages/create_gp.css";
 
 const Update = () => {
   const { id } = useParams(); // Récupère l'ID depuis l'URL

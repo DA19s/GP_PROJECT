@@ -1,23 +1,19 @@
 import axios from "axios";
 import { LogOut, Package, PlusCircle, User } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
+import { FaEdit, FaEye, FaTrash } from "react-icons/fa"; // Import des icônes
 import { useNavigate } from "react-router-dom";
+import logo from "../assets/Capture d’écran 2025-03-23 à 15.05.00.png"; // Remplace par ton vrai chemin d'image
 import coteIvoireFlag from "../assets/civ.jpg";
-import logo from "../assets/logoo.png"; // Remplace par ton vrai chemin d'image
 import senegalFlag from "../assets/sn.jpg";
 import "../pages/Dashboard.css";
-
 const Dashboard = () => {
   const [items, setItems] = useState([]);
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [selectedGp, setSelectedGp] = useState(null);
   const [activeTab, setActiveTab] = useState("details");
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false); // État pour afficher la carte de confirmation
-  const [groupageToDelete, setGroupageToDelete] = useState(null); // État pour le groupage à supprimer
   const token = sessionStorage.getItem("token");
-
   useEffect(() => {
     axios
       .get("http://localhost:3000/api/gp/gpo", {
@@ -35,7 +31,7 @@ const Dashboard = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("jwt");
-    navigate("/auth2");
+    navigate("/login");
   };
 
   const creategp = () => {
@@ -43,38 +39,28 @@ const Dashboard = () => {
   };
 
   const updateGp = (id) => {
-    sessionStorage.setItem("selectedGpId", id);
-    navigate(`/update/${id}`);
+  navigate(`/update/${id}`)
   };
 
   const viewAsk = (id) => {
     console.log(id);
+
     navigate(`/viewAsk/${id}`);
   };
 
-  const handleDeleteClick = (id, gpName) => {
-    setGroupageToDelete({ id, gpName });
-    setShowDeleteConfirm(true); // Affiche la carte de confirmation
-  };
-
-  const confirmDelete = async () => {
-    if (groupageToDelete) {
-      try {
-        const response = await axios.delete(
-          `http://localhost:3000/api/gp/${groupageToDelete.id}`,
-          { withCredentials: true }
-        );
-        console.log(response);
-        setItems(items.filter((item) => item._id !== groupageToDelete.id));
-        setShowDeleteConfirm(false); // Cacher la carte de confirmation après suppression
-      } catch (error) {
-        console.error("Erreur de connexion", error);
-      }
+  const deleteGp = async (id) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:3000/api/gp/${id}`,
+        { withCredentials: true }
+      );
+      console.log(response);
+      setItems(items.filter((item) => item._id !== id));
+      localStorage.setItem("token", response.data.token);
+      console.log(response.data.token);
+    } catch (error) {
+      console.error("Erreur de connexion", error);
     }
-  };
-
-  const cancelDelete = () => {
-    setShowDeleteConfirm(false); // Cacher la carte sans supprimer
   };
 
   const handleGpClick = (gp) => {
@@ -101,15 +87,15 @@ const Dashboard = () => {
           <User size={30} onClick={() => setMenuOpen(!menuOpen)} />
           {menuOpen && (
             <div className="user-dropdown">
-              <p className="asq" onClick={() => viewAsk(items._id)}>
+              <p onClick={() => viewAsk(items._id)}>
                 {" "}
                 <Package size={16} /> Voir mes demandes
               </p>
-              <p onClick={() => navigate("/Dashboard")}>
+              <p onClick={() => navigate("/my_packages")}>
                 {" "}
                 <Package size={16} /> Mes colis créés
               </p>
-              <p className="col" onClick={() => creategp()}>
+              <p onClick={() => creategp()}>
                 {" "}
                 <PlusCircle size={16} /> Créer un colis
               </p>
@@ -123,28 +109,30 @@ const Dashboard = () => {
       </header>
 
       <div className="dashboard-container">
-        <h1 className="gp-title2">MES GROUPAGES DISPONIBLES</h1>
+        <h1 className="gp-title">MES GROUPAGES DISPONIBLES</h1>
         <div className="gp-list">
           {items.map((item) => (
             <div key={item._id} className="gp-card">
-              <div className="gp-icons">
-                <FaEye
-                  title="Voir"
-                  className="gp-icon gp-icon-voir"
-                  onClick={() => viewAsk(item._id)}
-                />
-                <FaEdit
-                  title="Modifier"
-                  className=" gp-icon gp-icon-edit"
-                  onClick={() => updateGp(item._id)}
-                />
-                <FaTrash
-                  title="Supprimer"
-                  className="gp-icon gp-icon-delete"
-                  onClick={() => handleDeleteClick(item._id, item.gp_name)} // Affiche la confirmation
-                />
+              <div className="gp-header">
+                {item.gp_name}
+                <div className=" gp-icon gp-icons-voir">
+                  <FaEye
+                    title="Voir"
+                    className="gp-icon"
+                    onClick={() => viewAsk(item._id)}
+                  />
+                  <FaEdit
+                    title="Modifier"
+                    className=" gp-icon gp-icon-edit"
+                    onClick={() => updateGp(item._id)}
+                  />
+                  <FaTrash
+                    title="Supprimer"
+                    className=" gp-icon gp-icon-delete"
+                    onClick={() => deleteGp(item._id)}
+                  />
+                </div>
               </div>
-              <div className="gp2-header">{item.gp_name}</div>
 
               <div className="gp-body">
                 <div className="gp-route">
@@ -156,7 +144,7 @@ const Dashboard = () => {
                       className="gp-flag"
                     />
                     <p className="gp-city">
-                      {item.pays_depart}, {item.ville_depart}
+                      {item.ville_depart}, {item.pays_depart}
                     </p>
                   </div>
                   <span className="gp-arrow">✈️</span>
@@ -168,17 +156,19 @@ const Dashboard = () => {
                       className="gp-flag"
                     />
                     <p className="gp-city">
-                      {item.pays_destination}, {item.ville_destination}
+                      {item.ville_destination}, {item.pays_destination}
                     </p>
                   </div>
                 </div>
 
                 <div className="gp-separator1"></div>
                 <p className="gp-price">PRIX : {item.prix_kilo} FCFA / KG</p>
+                <div className="gp-separator1"></div>
+                <p className="gp-date">
+                  Date de départ:
+                  {new Date(item.date_depart).toLocaleDateString()}
+                </p>
                 <div className="gp-separator2"></div>
-                <p className="gp-date">Date de départ</p>
-                <span>{new Date(item.date_depart).toLocaleDateString()}</span>
-                <div className="dashboard-separator3"></div>
               </div>
               <button
                 className="gp-button1"
@@ -189,27 +179,6 @@ const Dashboard = () => {
             </div>
           ))}
         </div>
-
-        {/* Modal de confirmation de suppression */}
-        {showDeleteConfirm && (
-          <div className="delete-confirmation-card">
-            <div className="delete-confirmation-content">
-              <p className="alert">
-                Voulez-vous vraiment supprimer le groupage "
-                {groupageToDelete.gpName}" ?
-              </p>
-              <div className="confirmation-buttons">
-                <button onClick={confirmDelete} className="btn-yes">
-                  Oui
-                </button>
-                <button onClick={cancelDelete} className="btn-no">
-                  Non
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
         {selectedGp && (
           <div className="modal-overlay">
             <div className="modal-content">
@@ -300,14 +269,13 @@ const Dashboard = () => {
               {activeTab === "clients" && (
                 <div className="modal-clients">
                   <h2>Clients Acceptés</h2>
-                  {selectedGp.client && selectedGp.client.length > 0 ? (
+                  {selectedGp.client && selectedGp.client.length > 0 ? ( // Correction ici
                     <table className="gp-table">
                       <thead>
                         <tr>
                           <th>Nom</th>
                           <th>Prénom</th>
-                          <th>Pays</th>
-                          <th>Ville</th>
+                          <th>Colis</th>
                           <th>Poids du colis</th>
                           <th>Numéro</th>
                         </tr>
@@ -317,8 +285,7 @@ const Dashboard = () => {
                           <tr key={client._id}>
                             <td>{client.nom}</td>
                             <td>{client.prenom}</td>
-                            <td>{client.pays}</td>
-                            <td>{client.ville}</td>
+                            <td>{client.colis}</td>
                             <td>{client.poid_colis} kg</td>
                             <td>{client.number}</td>
                           </tr>

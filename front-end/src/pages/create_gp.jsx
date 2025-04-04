@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "/Users/macretina/GP_PROJECT/front-end/src/pages/create_gp.css";
+import "../pages/create_gp.css";
 
 const Create = () => {
   const [gp_name, setGp_name] = useState("");

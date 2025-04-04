@@ -20,6 +20,12 @@ const tempSchema = mongoose.Schema(
             trim: true
         },
         
+        colis: {
+            type: String,
+            required: [true],
+            trim: true
+        },
+        
         number: {
             type: String,
             required: [true],

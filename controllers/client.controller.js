@@ -17,6 +17,7 @@ module.exports.SignUpClient = async (req, res) => {
 
         const nom = info.nom;
         const prenom = info.prenom;
+        const colis = info.colis;
         const number = info.number;
         const email = info.email;
         const poid_colis = info.poid_colis;
@@ -55,6 +56,7 @@ module.exports.SignUpClient = async (req, res) => {
                     client: {
                         nom: nom,
                         prenom: prenom,
+                        colis: colis,
                         number: number,
                         email: email,
                         poid_colis: poid_colis,

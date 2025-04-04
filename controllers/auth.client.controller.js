@@ -12,6 +12,8 @@ const createToken = (id) => {
    
 module.exports.signUp = async (req, res) => {
     try{
+        console.log('ok');
+        
         const user = await User.create(req.body);
         console.log(user);
         

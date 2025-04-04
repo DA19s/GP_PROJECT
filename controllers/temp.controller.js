@@ -43,9 +43,10 @@ module.exports.AskClient = [ requireAuth, async (req, res) => {
         console.log(prix);
         
 
-
+        console.log(req);
         
-        const temp = await TEMP.create({gp_name: req.body.gp_name, nom: nom, prenom: prenom, number: number, poid_colis: req.body.poid_colis, email: email, prix: prix});
+        
+        const temp = await TEMP.create({gp_name: req.body.gp_name, nom: nom, prenom: prenom, colis: req.body.colis, number: number, poid_colis: req.body.poid_colis, email: email, prix: prix});
         console.log('ok');
         await mail(
             'ibhdaz@gmail.com', // Adresse e-mail du destinataire

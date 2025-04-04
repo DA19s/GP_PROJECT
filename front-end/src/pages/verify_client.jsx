@@ -23,7 +23,7 @@ const Verify_client = () => {
           "Authorization"
         ] = `Bearer ${response.data.token}`;
         console.log("Token reçu:", response.data.token);
-        navigate("/DashClient");
+        navigate("/viewGp");
       } else {
         console.error("Erreur: Aucun token reçu.");
       }

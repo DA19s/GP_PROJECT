@@ -81,6 +81,7 @@ const ViewAsk = () => {
               <th>Nom</th>
               <th>Prénom</th>
               <th>Poids du colis (kg)</th>
+              <th>Colis</th>
               <th>Numéro</th>
               <th>Prix (XOF)</th>
               <th>Action</th>
@@ -92,6 +93,7 @@ const ViewAsk = () => {
                 <td>{item.nom}</td>
                 <td>{item.prenom}</td>
                 <td>{item.poid_colis}</td>
+                <td>{item.colis}</td>
                 <td>{item.number}</td>
                 <td>{item.prix}</td>
                 <td>
