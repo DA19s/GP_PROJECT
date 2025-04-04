@@ -60,6 +60,8 @@
 .logout {
   color: red;
   font-weight: bold;
+  position: relative;
+  top: -40px;
 }
 
 .gp-container {
@@ -115,6 +117,9 @@
   font-weight: bold;
   height: 30px;
   width: 100%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 }
 
 /* Contenu de la carte */
@@ -185,7 +190,7 @@
 
 /* Prix */
 .gp-price {
-  background-color: #337bed;
+  background-color: #012e4f;
   color: white;
   padding: 8px;
   border-radius: 5px;
@@ -217,7 +222,7 @@ p.gp-date {
 
 /* Bouton */
 .gp-button {
-  background-color: #4c79b3;
+  background-color: #012e4f;
   color: white;
   padding: 10px;
   width: 100%;
@@ -228,7 +233,7 @@ p.gp-date {
 }
 
 .gp-button:hover {
-  background-color: #3a5f8c;
+  background-color: #012e4f;
 }
 /* Flou de fond quand la modal est ouverte */
 .blur-background {
@@ -308,7 +313,7 @@ p.gp-date {
 .modal-nav button.active {
   border-bottom: 3px solid #ff6600;
   font-weight: bold;
-  background-color: #6c8ebf;
+  background-color: #012e4f;
 }
 
 /* Formulaire */
@@ -401,7 +406,7 @@ button.gp-button1 {
   width: 200px;
   height: 40px;
   border-radius: 5px;
-  background: #337bed;
+  background: #012e4f;
   color: white;
   font-size: 17px;
   bottom: 30px;
@@ -442,13 +447,13 @@ button.gp-button1:hover {
 /* Icône de suppression */
 .gp-icon.gp-icon-delete {
   color: hsl(14, 100%, 57%);
-  left: 125px;
+  left: 120px;
   position: relative;
 }
 .gp-icon.gp-icon-voir {
   position: relative;
   color: #009ed8;
-  left: 125px;
+  left: 120px;
 }
 .gp-icon.gp-icon-edit {
   position: relative;
@@ -555,4 +560,59 @@ button.gp-button1:hover {
     padding: 10px;
     font-size: 14px;
   }
+}
+.delete-confirmation-card {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.delete-confirmation-content {
+  background-color: rgb(255, 255, 255);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.alert {
+  top: 5px;
+  position: relative;
+}
+.confirmation-buttons {
+  display: flex;
+  margin-top: 20px;
+}
+
+.confirmation-buttons button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 150px;
+}
+
+.btn-yes {
+  background-color: green;
+  color: white;
+}
+
+.btn-no {
+  background-color: red;
+  color: white;
+}
+.asq {
+  position: relative;
+  top: 79px;
+}
+.col {
+  position: relative;
+  bottom: 70px;
 }

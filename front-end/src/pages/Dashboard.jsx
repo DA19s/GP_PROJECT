@@ -7,13 +7,17 @@ import coteIvoireFlag from "../assets/civ.jpg";
 import logo from "../assets/logoo.png"; // Remplace par ton vrai chemin d'image
 import senegalFlag from "../assets/sn.jpg";
 import "../pages/Dashboard.css";
+
 const Dashboard = () => {
   const [items, setItems] = useState([]);
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [selectedGp, setSelectedGp] = useState(null);
   const [activeTab, setActiveTab] = useState("details");
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false); // État pour afficher la carte de confirmation
+  const [groupageToDelete, setGroupageToDelete] = useState(null); // État pour le groupage à supprimer
   const token = sessionStorage.getItem("token");
+
   useEffect(() => {
     axios
       .get("http://localhost:3000/api/gp/gpo", {
@@ -31,36 +35,46 @@ const Dashboard = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("jwt");
-    navigate("/login");
+    navigate("/auth2");
   };
 
   const creategp = () => {
     navigate("/create_gp");
   };
 
-  //const updateGp = (id) => {
-  // navigate(`/update/${id}`)
-  //};
+  const updateGp = (id) => {
+    sessionStorage.setItem("selectedGpId", id);
+    navigate(`/update/${id}`);
+  };
 
   const viewAsk = (id) => {
     console.log(id);
-
     navigate(`/viewAsk/${id}`);
   };
 
-  const deleteGp = async (id) => {
-    try {
-      const response = await axios.delete(
-        `http://localhost:3000/api/gp/${id}`,
-        { withCredentials: true }
-      );
-      console.log(response);
-      setItems(items.filter((item) => item._id !== id));
-      localStorage.setItem("token", response.data.token);
-      console.log(response.data.token);
-    } catch (error) {
-      console.error("Erreur de connexion", error);
+  const handleDeleteClick = (id, gpName) => {
+    setGroupageToDelete({ id, gpName });
+    setShowDeleteConfirm(true); // Affiche la carte de confirmation
+  };
+
+  const confirmDelete = async () => {
+    if (groupageToDelete) {
+      try {
+        const response = await axios.delete(
+          `http://localhost:3000/api/gp/${groupageToDelete.id}`,
+          { withCredentials: true }
+        );
+        console.log(response);
+        setItems(items.filter((item) => item._id !== groupageToDelete.id));
+        setShowDeleteConfirm(false); // Cacher la carte de confirmation après suppression
+      } catch (error) {
+        console.error("Erreur de connexion", error);
+      }
     }
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteConfirm(false); // Cacher la carte sans supprimer
   };
 
   const handleGpClick = (gp) => {
@@ -87,15 +101,15 @@ const Dashboard = () => {
           <User size={30} onClick={() => setMenuOpen(!menuOpen)} />
           {menuOpen && (
             <div className="user-dropdown">
-              <p onClick={() => viewAsk(items._id)}>
+              <p className="asq" onClick={() => viewAsk(items._id)}>
                 {" "}
                 <Package size={16} /> Voir mes demandes
               </p>
-              <p onClick={() => navigate("/my_packages")}>
+              <p onClick={() => navigate("/Dashboard")}>
                 {" "}
                 <Package size={16} /> Mes colis créés
               </p>
-              <p onClick={() => creategp()}>
+              <p className="col" onClick={() => creategp()}>
                 {" "}
                 <PlusCircle size={16} /> Créer un colis
               </p>
@@ -122,12 +136,12 @@ const Dashboard = () => {
                 <FaEdit
                   title="Modifier"
                   className=" gp-icon gp-icon-edit"
-                  onClick={() => navigate(`/gp/edit/${item._id}`)}
+                  onClick={() => updateGp(item._id)}
                 />
                 <FaTrash
                   title="Supprimer"
                   className="gp-icon gp-icon-delete"
-                  onClick={() => deleteGp(items._id)}
+                  onClick={() => handleDeleteClick(item._id, item.gp_name)} // Affiche la confirmation
                 />
               </div>
               <div className="gp2-header">{item.gp_name}</div>
@@ -142,7 +156,7 @@ const Dashboard = () => {
                       className="gp-flag"
                     />
                     <p className="gp-city">
-                      {item.ville_depart}, {item.pays_depart}
+                      {item.pays_depart}, {item.ville_depart}
                     </p>
                   </div>
                   <span className="gp-arrow">✈️</span>
@@ -154,7 +168,7 @@ const Dashboard = () => {
                       className="gp-flag"
                     />
                     <p className="gp-city">
-                      {item.ville_destination}, {item.pays_destination}
+                      {item.pays_destination}, {item.ville_destination}
                     </p>
                   </div>
                 </div>
@@ -175,6 +189,27 @@ const Dashboard = () => {
             </div>
           ))}
         </div>
+
+        {/* Modal de confirmation de suppression */}
+        {showDeleteConfirm && (
+          <div className="delete-confirmation-card">
+            <div className="delete-confirmation-content">
+              <p className="alert">
+                Voulez-vous vraiment supprimer le groupage "
+                {groupageToDelete.gpName}" ?
+              </p>
+              <div className="confirmation-buttons">
+                <button onClick={confirmDelete} className="btn-yes">
+                  Oui
+                </button>
+                <button onClick={cancelDelete} className="btn-no">
+                  Non
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {selectedGp && (
           <div className="modal-overlay">
             <div className="modal-content">
@@ -265,7 +300,7 @@ const Dashboard = () => {
               {activeTab === "clients" && (
                 <div className="modal-clients">
                   <h2>Clients Acceptés</h2>
-                  {selectedGp.client && selectedGp.client.length > 0 ? ( // Correction ici
+                  {selectedGp.client && selectedGp.client.length > 0 ? (
                     <table className="gp-table">
                       <thead>
                         <tr>

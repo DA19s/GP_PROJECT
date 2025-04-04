@@ -1,0 +1,72 @@
+.create {
+  border-radius: 20px;
+  overflow-y: auto; /* Permet le défilement vertical */
+  position: relative;
+  width: 900px;
+  height: 570px;
+  margin: 0 auto 100px;
+  background: #fff;
+  box-shadow: -10px -10px 15px rgba(255, 255, 255, 0.3),
+    10px 10px 15px rgba(70, 70, 70, 0.15),
+    inset -10px -10px 15px rgba(255, 255, 255, 0.3),
+    inset 10px 10px 15px rgba(70, 70, 70, 0.15);
+  position: relative;
+  top: 60px;
+}
+
+.corps {
+  background-color: #012e4f;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+h1.creat {
+  text-align: center;
+  top: 10px;
+  color: #00121f;
+  font-size: 30px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form-group input[type="number"],
+.form-group input[type="date"] {
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #012e4f;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}

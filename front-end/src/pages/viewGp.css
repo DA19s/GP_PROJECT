@@ -137,7 +137,7 @@ body {
 
 /* Prix */
 .gp-price {
-  background-color: #337bed;
+  background-color: #012e4f;
   color: white;
   padding: 8px;
   border-radius: 5px;
@@ -167,7 +167,7 @@ body {
 
 /* Bouton */
 .gp-button {
-  background-color: #4c79b3;
+  background-color: #012e4f;
   color: white;
   padding: 10px;
   width: 100%;
@@ -353,7 +353,7 @@ button.gp-button1 {
   width: 200px;
   height: 40px;
   border-radius: 5px;
-  background: #337bed;
+  background: #012e4f;
   color: white;
   font-size: 17px;
   top: 10px;
