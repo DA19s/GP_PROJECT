@@ -1,10 +1,16 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import {
+  FaFileInvoice,
+  FaSignInAlt,
+  FaUserCircle,
+  FaUserPlus,
+} from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
-
 import coteIvoireFlag from "../assets/civ.jpg";
 import logo from "../assets/logoo.png";
 import senegalFlag from "../assets/sn.jpg";
+import ConfirmationCard from "../components/ConfirmationCard";
 import "../pages/viewGp.css";
 
 const ViewGp = () => {
@@ -15,6 +21,8 @@ const ViewGp = () => {
   const [colisType, setColisType] = useState("");
   const [colisPoids, setColisPoids] = useState("");
   const [gp_name, setGp_name] = useState("");
+  const [showMenu, setShowMenu] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const { id } = useParams();
   const token = sessionStorage.getItem("token");
 
@@ -32,6 +40,7 @@ const ViewGp = () => {
         console.error("Erreur de connexion", error);
       });
   }, []);
+
   const handleGpClick = (gp) => {
     setSelectedGp(gp);
     setActiveTab("details");
@@ -40,12 +49,17 @@ const ViewGp = () => {
   const closeModal = () => {
     setSelectedGp(null);
   };
-  /* const handlegp = () => {
-    navigate(`/client/${id}`);
+
+  const handleAuthClick = () => {
+    navigate("/Auth");
   };
-*/
+
+  const handleReceiptClick = () => {
+    navigate("/Recu");
+  };
+
   const handleSignupClient = async (e) => {
-    //e.preventDefault();
+    e.preventDefault();
     const token = sessionStorage.getItem("token");
     console.log("Token récupéré depuis le cookie :", token);
     try {
@@ -57,7 +71,7 @@ const ViewGp = () => {
           withCredentials: true,
         }
       );
-      navigate("/dashClient");
+      setShowConfirmation(true);
     } catch (error) {
       if (
         error.response &&
@@ -76,7 +90,34 @@ const ViewGp = () => {
 
   return (
     <div className="gp-container">
-      <img src={logo} alt="Logo" className="gp-logo" />
+      <header className="header">
+        <img src={logo} alt="GP Connect Logo" className="logo" />
+        <div className="header-icons">
+          <FaFileInvoice
+            className="receipt-icon"
+            title="Voir le reçu"
+            onClick={handleReceiptClick}
+          />
+          <div className="user-menu">
+            <FaUserCircle
+              className="user-icon"
+              onClick={() => setShowMenu(!showMenu)}
+            />
+            {showMenu && (
+              <div className="dropdown-menu">
+                <p onClick={handleAuthClick} className="menu-item">
+                  <FaSignInAlt className="menu-icon" /> Connexion
+                </p>
+                <hr className="menu-separator" />
+                <p onClick={handleAuthClick} className="menu-item">
+                  <FaUserPlus className="menu-icon" /> Deconnexion
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      </header>
+
       <h1 className="gp-title">
         {items.length === 0
           ? "PAS DE GROUPAGES DISPONIBLES"
@@ -84,41 +125,40 @@ const ViewGp = () => {
       </h1>
       <div className="gp-list">
         {items.map((item) => (
-          <div key={item._id} className="gp-card">
+          <div key={item._id} className="gp-cardd">
             <div className="gp-header">{item.gp_name}</div>
             <div className="gp-body">
               <div className="gp-route">
                 <div className="gp-country">
-                  <p className="gp-country-name">{item.pays_depart}</p>
+                  <p className="gp-country-namev">{item.pays_depart}</p>
                   <img
                     src={senegalFlag}
                     alt="Drapeau Sénégal"
-                    className="gp-flag"
+                    className="gp-flags"
                   />
                   <p className="gp-city">
-                    {item.ville_depart}, {item.pays_depart}
+                    {item.pays_depart},{item.ville_depart},
                   </p>
                 </div>
                 <span className="gp-arrow">✈️</span>
                 <div className="gp-country">
-                  <p className="gp-country-name">{item.pays_destination}</p>
+                  <p className="gp-country-namec">{item.pays_destination}</p>
                   <img
                     src={coteIvoireFlag}
                     alt="Drapeau Côte d'Ivoire"
-                    className="gp-flag"
+                    className="gp-flagc"
                   />
                   <p className="gp-city">
-                    {item.ville_destination}, {item.pays_destination}
+                    {item.pays_destination},{item.ville_destination},
                   </p>
                 </div>
               </div>
-
-              <div className="gp-separator1"></div>
+              <div className="gp-separatorr1"></div>
               <p className="gp-price">PRIX : {item.prix_kilo} FCFA / KG</p>
-              <div className="gp-separator2"></div>
-              <p className="gp-date">Date de départ </p>
+              <div className="gp-separatorr2"></div>
+              <p className="gp-date1">Date de départ </p>
               <span>{new Date(item.date_depart).toLocaleDateString()}</span>
-              <div className="gp-separator3"></div>
+              <div className="gp-separatorr3"></div>
             </div>
             <button className="gp-button1" onClick={() => handleGpClick(item)}>
               INSCRIRE SON GP
@@ -151,10 +191,6 @@ const ViewGp = () => {
             {activeTab === "details" && (
               <div className="modal-details">
                 <h2>Les informations du GP</h2>
-
-                {/* Nom du groupage en titre */}
-
-                {/* Tableau des informations */}
                 <table className="gp-table">
                   <tbody>
                     <tr>
@@ -239,7 +275,6 @@ const ViewGp = () => {
                     onChange={(e) => setColisType(e.target.value)}
                     required
                   />
-
                   <label className="LAB2">Poids du colis (kg) :</label>
                   <input
                     className="nput2"
@@ -249,9 +284,8 @@ const ViewGp = () => {
                     onChange={(e) => setColisPoids(e.target.value)}
                     required
                   />
-
                   <button
-                    onClick={() => handleSignupClient(gp_name, colisType, colisPoids)}
+                    onClick={handleSignupClient}
                     className="signupClient"
                     type="submit"
                   >
@@ -262,6 +296,10 @@ const ViewGp = () => {
             )}
           </div>
         </div>
+      )}
+
+      {showConfirmation && (
+        <ConfirmationCard onClose={() => setShowConfirmation(false)} />
       )}
     </div>
   );

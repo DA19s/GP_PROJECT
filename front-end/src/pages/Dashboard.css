@@ -106,6 +106,7 @@
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border: 2px solid #6c8ebf;
+  height: 370px;
 }
 
 /* En-tête de la carte */
@@ -121,7 +122,10 @@
   align-items: center;
   display: flex;
 }
-
+.date {
+  position: relative;
+  top: 10px;
+}
 /* Contenu de la carte */
 .gp-body {
   padding: 15px;
@@ -143,7 +147,7 @@
   background-color: #1e1e1e;
 
   position: relative;
-  bottom: 30px;
+  bottom: 10px;
 }
 .dashboard-separator3 {
   width: 100%;
@@ -166,14 +170,27 @@
   bottom: 20px;
 }
 
-.gp-country-name {
-  font-weight: bold;
+.gp-country-namess {
+  position: relative;
+  top: -10px;
+  left: 5px;
 }
-
-.gp-flag {
+.gp-country-namecc {
+  position: relative;
+  top: -10px;
+  left: 5px;
+}
+.gp-flagss {
   width: 50px;
   height: 35px;
   border-radius: 5px;
+}
+.gp-flagcc {
+  width: 50px;
+  height: 35px;
+  border-radius: 5px;
+  position: relative;
+  left: 20px;
 }
 
 .gp-city {
@@ -203,21 +220,18 @@
 }
 
 /* Date */
-p.gp-date {
-  font-weight: bold;
-  margin-top: 10px;
+p.gp-date2 {
   position: relative;
-  bottom: 20px;
-  left: 10px;
+  color: rgb(6, 96, 222);
+  left: 5px;
+  bottom: 15px;
+  font-weight: bold;
 }
 .gp-date span {
   position: relative;
   top: 30px;
-  right: 120px;
-}
-.datee {
-  position: relative;
-  bottom: 10px;
+  right: 100px;
+  font-weight: bold;
 }
 
 /* Bouton */
@@ -400,7 +414,7 @@ p.gp-date {
 .submit-btn:hover {
   background: #003366;
 }
-button.gp-button1 {
+button.gp-button11 {
   position: relative;
   border: 1px solid rgb(179, 176, 176);
   width: 200px;
@@ -435,9 +449,11 @@ button.gp-button1:hover {
 /* Conteneur des icônes sous le bouton "Inscrire son GP" */
 
 /* Style des icônes */
-.gp-icons {
+.gp-icon {
   font-size: 20px;
-  color: #28a745;
+  justify-content: center;
+  display: flex;
+  align-items: center;
   cursor: pointer;
   position: relative; /* Nécessaire pour afficher le texte au survol */
   transition: color 0.3s ease;
@@ -445,26 +461,25 @@ button.gp-button1:hover {
 }
 
 /* Icône de suppression */
-.gp-icon.gp-icon-delete {
+.gp-icon-delete {
   color: hsl(14, 100%, 57%);
-  left: 120px;
+
   position: relative;
 }
-.gp-icon.gp-icon-voir {
+.gp-icon-voir {
   position: relative;
   color: #009ed8;
-  left: 120px;
 }
-.gp-icon.gp-icon-edit {
+.gp-icon-edit {
   position: relative;
-  left: 120px;
+
   color: #4caf50;
 }
 
 .gp-icons span {
   display: none;
   position: absolute;
-  background-color: #333;
+  background-color: #c90c0c;
   color: white;
   font-size: 12px;
   padding: 5px;

@@ -3,19 +3,22 @@ body {
   width: 100vw;
 }
 .gp-container {
-  background-color: #012e4f; /* Bleu de fond */
+  background-color: #00203e; /* Bleu de fond */
   min-height: 100vh;
   padding: 20px;
   text-align: center;
 }
 
 /* Logo */
-.gp-logo {
+.gp-logoo {
   width: 250px; /* Ajuste selon ton logo */
   height: auto;
   display: block;
   margin: 0 auto 20px auto;
   border-radius: 10px;
+  right: 510px;
+  position: relative;
+  bottom: 10px;
 }
 
 /* Titre */
@@ -25,7 +28,7 @@ body {
   margin-bottom: 20px;
   position: relative;
   top: 30px;
-  left: 40px;
+  left: 10px;
 }
 
 /* Liste des groupages */
@@ -39,14 +42,19 @@ body {
 }
 
 /* Carte de groupage */
-.gp-card {
+.gp-cardd {
   background-color: white;
   width: 320px;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border: 2px solid #6c8ebf;
-  height: 360px;
+  height: 370px;
+  bottom: 30px;
+  position: relative;
+
+  /* Nouveau box-shadow attractif */
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.25),
+    0 4px 12px rgba(1, 46, 79, 0.4);
 }
 
 /* En-tête de la carte */
@@ -70,7 +78,7 @@ body {
 }
 
 /* Séparateur */
-.gp-separator1 {
+.gp-separatorr1 {
   width: 100%;
   height: 2px;
   background-color: #2f2f2f;
@@ -78,7 +86,7 @@ body {
   position: relative;
   bottom: 20px;
 }
-.gp-separator2 {
+.gp-separatorr2 {
   width: 100%;
   height: 2px;
   background-color: #2f2f2f;
@@ -86,7 +94,7 @@ body {
   position: relative;
   bottom: 12px;
 }
-.gp-separator3 {
+.gp-separatorr3 {
   width: 100%;
   height: 2px;
   background-color: #1e1e1e;
@@ -107,17 +115,28 @@ body {
   text-align: center;
 }
 
-.gp-country-name {
-  font-weight: bold;
+.gp-country-namev {
+  position: relative;
+  top: -10px;
+  left: 5px;
+}
+.gp-country-namec {
   position: relative;
   top: -10px;
   left: 5px;
 }
 
-.gp-flag {
+.gp-flags {
   width: 50px;
   height: 35px;
   border-radius: 5px;
+}
+.gp-flagc {
+  width: 50px;
+  height: 35px;
+  border-radius: 5px;
+  position: relative;
+  left: 20px;
 }
 
 .gp-city {
@@ -130,9 +149,10 @@ body {
 .gp-arrow {
   font-size: 24px;
   color: #1f4a8a;
-  rotate: 45deg;
+  rotate: 43deg;
   position: relative;
-  bottom: 10px;
+  bottom: 15px;
+  left: 15px;
 }
 
 /* Prix */
@@ -151,12 +171,12 @@ body {
 }
 
 /* Date */
-.gp-date {
-  font-weight: bold;
-  margin-top: 10px;
+.gp-date1 {
   position: relative;
-  left: 50px;
-  top: -10px;
+  color: rgb(6, 96, 222);
+  left: 5px;
+  bottom: 15px;
+  font-weight: bold;
 }
 
 .datee {
@@ -175,6 +195,7 @@ body {
   font-size: 16px;
   cursor: pointer;
   border-radius: 0 0 10px 10px;
+  top: 30px;
 }
 
 .gp-button:hover {
@@ -480,4 +501,55 @@ button.gp-button1:hover {
   font-size: 20px;
   cursor: pointer;
   color: #777;
+}
+.confirmation-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  padding-top: 80px;
+}
+
+.confirmation-card {
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 30px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  z-index: 10000;
+  text-align: center;
+  animation: slideDown 0.5s ease;
+}
+
+.confirmation-title {
+  font-size: 26px;
+  margin-bottom: 20px;
+  color: #2e7d32;
+}
+
+.confirmation-message {
+  font-size: 16px;
+  margin: 8px 0;
+  color: #333;
+}
+
+.confirmation-close {
+  margin-top: 20px;
+  background-color: #2e7d32;
+  color: white;
+  padding: 10px 25px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.confirmation-close:hover {
+  background-color: #1b5e20;
 }
