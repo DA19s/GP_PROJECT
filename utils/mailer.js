@@ -11,15 +11,16 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-// Fonction pour envoyer un e-mail
-const sendMail = (to, subject, text, html) => {
+// Fonction pour envoyer un e-mail avec possibilité d'ajouter des pièces jointes
+const sendMail = (to, subject, text, html, attachments = []) => { // Ajout du paramètre "attachments"
     const mailOptions = {
         from: 'daibra2005@gmail.com',
         to: to,
         replyTo: 'ibhdaz@gmail.com',
         subject: subject,
         text: text,
-        html: html
+        html: html,
+        attachments: attachments // Ajout des pièces jointes ici
     };
 
     return transporter.sendMail(mailOptions);

@@ -19,12 +19,28 @@ dotenv.config();
 
 const PORT = process.env.PORT || 3000;
 //app.use(cors())
+
 app.use(
   cors({
     origin: "http://localhost:5173",
     credentials: true,
   })
 );
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
+const path = require("path");
+
+// ... autres middlewares ici
+
+// Servir le dossier factures en statique
+app.use("/factures", express.static(path.join(__dirname, "factures")));
+
+// ... routes, écoute serveur, etc.
 
 //Configuration des variables d'environnement
 
