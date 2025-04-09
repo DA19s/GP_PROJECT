@@ -44,6 +44,8 @@ module.exports.signUp = async (req, res) => {
             `Votre code est ${code}`,// Texte brut
             `<p>Votre code est ${code}</p>` // Contenu HTML
         );       
+        console.log(email);
+        
         
         res.status(200).json({user})
 

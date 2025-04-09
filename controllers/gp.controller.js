@@ -13,6 +13,7 @@ module.exports.createGp =[ requireAuth, async (req, res) => {
         const nom = info.nom;
         const prenom = info.prenom;
         const number = info.number;
+        const email = info.email;
 
         const owner = (prenom + " " + nom)
         console.log(owner);
@@ -21,6 +22,7 @@ module.exports.createGp =[ requireAuth, async (req, res) => {
         const newGP = await GP.create({
             owner: owner,
             owner_number: number,
+            owner_email: email,
             gp_name: req.body.gp_name,
             pays_depart: req.body.pays_depart,
             ville_depart: req.body.ville_depart,

@@ -27,7 +27,9 @@ module.exports.AskClient = [ requireAuth, async (req, res) => {
             return res.status(400).send({ error: "Duplicate field value entered" });
         }
 
-
+        const owner_email = await GP.findOne({gp_name: req.body.gp_name})
+        const owner_email1 = owner_email.owner_email;
+        console.log(owner_email1);
         
 
         console.log(req.body);
@@ -49,7 +51,7 @@ module.exports.AskClient = [ requireAuth, async (req, res) => {
         const temp = await TEMP.create({gp_name: req.body.gp_name, nom: nom, prenom: prenom, colis: req.body.colis, number: number, poid_colis: req.body.poid_colis, email: email, prix: prix});
         console.log('ok');
         await mail(
-            'ibhdaz@gmail.com', // Adresse e-mail du destinataire
+            owner_email1, // Adresse e-mail du destinataire
             'Nouveau client', // Sujet de l'e-mail
             `Vous avez un nouveau client ${nom} ${prenom} `,// Texte brut
             `<p>Vous avez un nouveau client ${nom} ${prenom} </p>` // Contenu HTML

@@ -20,6 +20,8 @@ module.exports.SignUpClient = async (req, res) => {
         
         const info = await temp.findById(req.params.id2)
 
+        console.log('okk');
+        
         const nom = info.nom;
         const prenom = info.prenom;
         const colis = info.colis;
@@ -80,6 +82,10 @@ module.exports.SignUpClient = async (req, res) => {
         const TEMPO = await temp.findByIdAndDelete(req.params.id2);
         if (!TEMPO) return res.status(404).send({ error: "TEMP not found" });
 
+
+        console.log('ok0');
+
+
         const factureDir = path.join(__dirname, "../factures");
         if (!fs.existsSync(factureDir)) {
             fs.mkdirSync(factureDir);
@@ -91,6 +97,9 @@ module.exports.SignUpClient = async (req, res) => {
         const stream = fs.createWriteStream(pdfPath);
         doc.pipe(stream);
 
+        console.log('ok1');
+        
+
         doc.fontSize(25).text("Facture", { align: "center" }).moveDown();
         doc.fontSize(14)
             .text(`Facture ID : ${info._id}`)
@@ -100,10 +109,13 @@ module.exports.SignUpClient = async (req, res) => {
         doc.end();
         await finished(stream);
 
+        console.log('ok2');
+
+
         // Envoi d'email avec le PDF en pièce jointe
         await mail(
             email,
-            'Nouveau client',
+            'Demande acceptee',
             `Votre demande est acceptée. Vous trouverez votre facture en pièce jointe.`,
             '<p>Votre demande est acceptée. Vous trouverez votre facture en pièce jointe.</p>',
             [{
@@ -112,6 +124,9 @@ module.exports.SignUpClient = async (req, res) => {
                 contentType: 'application/pdf' // Indique que c’est un fichier PDF
             }]
         );
+
+        console.log('ok3');
+
          
         return res.status(200).send(client);
     } catch (err) {

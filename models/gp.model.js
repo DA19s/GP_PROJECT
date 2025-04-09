@@ -17,6 +17,11 @@ const GPSchema = new mongoose.Schema(
             type: String,
             required: true
         },
+        
+        owner_email: {
+            type: String,
+            required: true
+        },
 
         pays_depart: {
             type: String,
