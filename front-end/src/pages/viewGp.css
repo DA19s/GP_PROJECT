@@ -503,54 +503,53 @@ button.gp-button1:hover {
   cursor: pointer;
   color: #777;
 }
-.confirmation-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
-  z-index: 9999;
-  display: flex;
-  justify-content: center;
-  align-items: start;
-  padding-top: 80px;
-}
-
-.confirmation-card {
-  background-color: #ffffff;
-  border-radius: 20px;
+.success-card {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
   padding: 30px;
-  max-width: 500px;
-  width: 90%;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-  z-index: 10000;
-  text-align: center;
-  animation: slideDown 0.5s ease;
-}
-
-.confirmation-title {
-  font-size: 26px;
-  margin-bottom: 20px;
-  color: #2e7d32;
-}
-
-.confirmation-message {
-  font-size: 16px;
-  margin: 8px 0;
-  color: #333;
-}
-
-.confirmation-close {
-  margin-top: 20px;
-  background-color: #2e7d32;
-  color: white;
-  padding: 10px 25px;
-  border: none;
   border-radius: 10px;
-  cursor: pointer;
+  text-align: center;
+  margin-top: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 128, 0, 0.2);
+  position: relative;
+  left: 30px;
 }
 
-.confirmation-close:hover {
-  background-color: #1b5e20;
+.success-card h2 {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.success-card button {
+  margin-top: 15px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+  top: -30px;
+}
+.payment-instructions {
+  margin-top: 1rem;
+  font-size: 16px;
+  color: #333;
+  background-color: #f1f8f5;
+  border-left: 4px solid #38b000;
+  padding: 10px 15px;
+  border-radius: 8px;
+  position: relative;
+  top: -39px;
+  left: -3px;
+}
+.payment-instructions .str1 {
+  color: #ff7900;
+}
+.payment-instructions .str2 {
+  color: #0468db;
+}
+.payment-instructions .str3 {
+  color: #38b000;
 }

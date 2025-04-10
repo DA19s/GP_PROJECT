@@ -1,34 +1,36 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import {
-  FaFileInvoice,
-  FaSignInAlt,
-  FaUserCircle,
-  FaUserPlus,
-} from "react-icons/fa";
-import { useNavigate, useParams } from "react-router-dom";
-import coteIvoireFlag from "../assets/civ.jpg";
+
 import logo from "../assets/logoo.png";
-import senegalFlag from "../assets/sn.jpg";
-import ConfirmationCard from "../components/ConfirmationCard";
+
 import "../pages/viewGp.css";
 
+import benFlag from "../assets/ben.png";
+import coteIvoireFlag from "../assets/civ.jpg";
+import senegalFlag from "../assets/sn.jpg";
+import togoFlag from "../assets/togo.png";
 const ViewGp = () => {
-  const navigate = useNavigate();
   const [items, setItems] = useState([]);
   const [selectedGp, setSelectedGp] = useState(null);
   const [activeTab, setActiveTab] = useState("details");
   const [colisType, setColisType] = useState("");
   const [colisPoids, setColisPoids] = useState("");
   const [gp_name, setGp_name] = useState("");
-  const [showMenu, setShowMenu] = useState(false);
-  const [showConfirmation, setShowConfirmation] = useState(false);
-  const { id } = useParams();
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
   const token = sessionStorage.getItem("token");
+  const flags = {
+    Sénégal: senegalFlag,
+    "Côte d'Ivoire": coteIvoireFlag,
+    Togo: togoFlag,
+    ben: benFlag,
+  };
+
+  const getFlag = (countryName) => flags[countryName] || null;
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/api/gp`, {
+      .get("http://localhost:3000/api/gp", {
         headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       })
@@ -39,31 +41,24 @@ const ViewGp = () => {
       .catch((error) => {
         console.error("Erreur de connexion", error);
       });
-  }, []);
+  }, [token]);
 
   const handleGpClick = (gp) => {
     setSelectedGp(gp);
     setActiveTab("details");
+    setFormSubmitted(false);
   };
 
   const closeModal = () => {
     setSelectedGp(null);
-  };
-
-  const handleAuthClick = () => {
-    navigate("/Auth");
-  };
-
-  const handleReceiptClick = () => {
-    navigate("/Recu");
+    setFormSubmitted(false);
   };
 
   const handleSignupClient = async (e) => {
     e.preventDefault();
     const token = sessionStorage.getItem("token");
-    console.log("Token récupéré depuis le cookie :", token);
     try {
-      const response = await axios.post(
+      await axios.post(
         `http://localhost:3000/api/temp/create`,
         { gp_name, poid_colis: colisPoids, colis: colisType },
         {
@@ -71,53 +66,19 @@ const ViewGp = () => {
           withCredentials: true,
         }
       );
-      setShowConfirmation(true);
+
+      setGp_name("");
+      setColisPoids("");
+      setColisType("");
+      setFormSubmitted(true); // ✅ Affiche la carte de succès
     } catch (error) {
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.error === "Duplicate field value entered"
-      ) {
-        setErrorMessage(
-          "Le numéro est déjà utilisé. Veuillez en saisir un autre."
-        );
-      } else {
-        setErrorMessage("Erreur de connexion. Veuillez réessayer.");
-      }
       console.error("Erreur de connexion", error);
     }
   };
 
   return (
     <div className="gp-container">
-      <header className="header">
-        <img src={logo} alt="GP Connect Logo" className="logo" />
-        <div className="header-icons">
-          <FaFileInvoice
-            className="receipt-icon"
-            title="Voir le reçu"
-            onClick={handleReceiptClick}
-          />
-          <div className="user-menu">
-            <FaUserCircle
-              className="user-icon"
-              onClick={() => setShowMenu(!showMenu)}
-            />
-            {showMenu && (
-              <div className="dropdown-menu">
-                <p onClick={handleAuthClick} className="menu-item">
-                  <FaSignInAlt className="menu-icon" /> Connexion
-                </p>
-                <hr className="menu-separator" />
-                <p onClick={handleAuthClick} className="menu-item">
-                  <FaUserPlus className="menu-icon" /> Deconnexion
-                </p>
-              </div>
-            )}
-          </div>
-        </div>
-      </header>
-
+      <img src={logo} alt="Logo" className="gp-logo" />
       <h1 className="gp-title">
         {items.length === 0
           ? "PAS DE GROUPAGES DISPONIBLES"
@@ -132,27 +93,28 @@ const ViewGp = () => {
                 <div className="gp-country">
                   <p className="gp-country-namev">{item.pays_depart}</p>
                   <img
-                    src={senegalFlag}
-                    alt="Drapeau Sénégal"
+                    src={getFlag(item.pays_depart)}
+                    alt={`Drapeau ${item.pays_depart}`}
                     className="gp-flags"
                   />
                   <p className="gp-city">
-                    {item.pays_depart},{item.ville_depart},
+                    {item.ville_depart}, {item.pays_depart}
                   </p>
                 </div>
                 <span className="gp-arrow">✈️</span>
                 <div className="gp-country">
                   <p className="gp-country-namec">{item.pays_destination}</p>
                   <img
-                    src={coteIvoireFlag}
-                    alt="Drapeau Côte d'Ivoire"
+                    src={getFlag(item.pays_destination)}
+                    alt={`Drapeau ${item.pays_destination}`}
                     className="gp-flagc"
                   />
                   <p className="gp-city">
-                    {item.pays_destination},{item.ville_destination},
+                    {item.ville_destination}, {item.pays_destination}
                   </p>
                 </div>
               </div>
+
               <div className="gp-separatorr1"></div>
               <p className="gp-price">PRIX : {item.prix_kilo} FCFA / KG</p>
               <div className="gp-separatorr2"></div>
@@ -255,51 +217,74 @@ const ViewGp = () => {
 
             {activeTab === "form" && (
               <div className="modal-form">
-                <h2>Mettre les Informations de votre GP</h2>
-                <form>
-                  <label className="LAB2">Nom du GP:</label>
-                  <input
-                    className="nput3"
-                    type="text"
-                    placeholder="Nom"
-                    value={gp_name}
-                    onChange={(e) => setGp_name(e.target.value)}
-                    required
-                  />
-                  <label className="LAB">Quelle est votre colis? :</label>
-                  <input
-                    className="nput1"
-                    type="text"
-                    placeholder="Ex: Vêtements, Électronique, Nourriture..."
-                    value={colisType}
-                    onChange={(e) => setColisType(e.target.value)}
-                    required
-                  />
-                  <label className="LAB2">Poids du colis (kg) :</label>
-                  <input
-                    className="nput2"
-                    type="number"
-                    placeholder="Poids en kg"
-                    value={colisPoids}
-                    onChange={(e) => setColisPoids(e.target.value)}
-                    required
-                  />
-                  <button
-                    onClick={handleSignupClient}
-                    className="signupClient"
-                    type="submit"
-                  >
-                    Soumettre
-                  </button>
-                </form>
+                {formSubmitted ? (
+                  <div className="success-card">
+                    <h2>✅ Demande envoyée avec succès !</h2>
+                    <p>Votre inscription a bien été enregistrée.</p>
+                    <p className="payment-instructions">
+                      Veuillez effectuer le paiement via{" "}
+                      <strong className="str2">Wave</strong> ou{" "}
+                      <strong className="str1">Orange Money</strong> au numéro
+                      suivant :{" "}
+                      <strong className="str3">
+                        {selectedGp.owner_number}
+                      </strong>
+                      . Une fois votre paiement effectué nous vous enverrons
+                      votre reçu confirmant la validation de votre commande par
+                      e-mail.
+                    </p>
+
+                    <button className="gp-button" onClick={closeModal}>
+                      Fermer
+                    </button>
+                  </div>
+                ) : (
+                  <>
+                    <h2>Mettre les Informations de votre GP</h2>
+                    <form>
+                      <label className="LAB2">Nom du GP:</label>
+                      <input
+                        className="nput3"
+                        type="text"
+                        placeholder="Nom"
+                        value={gp_name}
+                        onChange={(e) => setGp_name(e.target.value)}
+                        required
+                      />
+                      <label className="LAB">Quelle est votre colis? :</label>
+                      <input
+                        className="nput1"
+                        type="text"
+                        placeholder="Ex: Vêtements, Électronique, Nourriture..."
+                        value={colisType}
+                        onChange={(e) => setColisType(e.target.value)}
+                        required
+                      />
+
+                      <label className="LAB2">Poids du colis (kg) :</label>
+                      <input
+                        className="nput2"
+                        type="number"
+                        placeholder="Poids en kg"
+                        value={colisPoids}
+                        onChange={(e) => setColisPoids(e.target.value)}
+                        required
+                      />
+
+                      <button
+                        onClick={handleSignupClient}
+                        className="signupClient"
+                        type="submit"
+                      >
+                        Soumettre
+                      </button>
+                    </form>
+                  </>
+                )}
               </div>
             )}
           </div>
         </div>
-      )}
-
-      {showConfirmation && (
-        <ConfirmationCard onClose={() => setShowConfirmation(false)} />
       )}
     </div>
   );

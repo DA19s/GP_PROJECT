@@ -3,6 +3,19 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../pages/create_gp.css";
 
+// Importation des drapeaux
+import beninFlag from "../assets/ben.png";
+import ciFlag from "../assets/civ.jpg";
+import senegalFlag from "../assets/sn.jpg";
+import togoFlag from "../assets/togo.png";
+
+const countryOptions = [
+  { name: "Sénégal", flag: senegalFlag },
+  { name: "Côte d'Ivoire", flag: ciFlag },
+  { name: "Togo", flag: togoFlag },
+  { name: "Bénin", flag: beninFlag },
+];
+
 const Create = () => {
   const [gp_name, setGp_name] = useState("");
   const [pays_depart, setPays_depart] = useState("");
@@ -21,7 +34,6 @@ const Create = () => {
   const create = async (e) => {
     e.preventDefault();
 
-    // Validation des champs
     if (!gp_name || !pays_depart || !ville_depart || !capacite) {
       alert("Veuillez remplir tous les champs obligatoires.");
       return;
@@ -50,7 +62,7 @@ const Create = () => {
         }
       );
       console.log("GP créé avec succès :", response.data);
-      navigate(`/Dashboard`); // Redirection après la création
+      navigate(`/Dashboard`);
     } catch (error) {
       console.error("Erreur de connexion", error);
     }
@@ -71,16 +83,32 @@ const Create = () => {
               onChange={(e) => setGp_name(e.target.value)}
             />
           </div>
+
           <div className="form-group">
             <label htmlFor="pays_depart">Pays de départ</label>
-            <input
-              id="pays_depart"
-              type="text"
-              placeholder="Pays de départ"
-              value={pays_depart}
-              onChange={(e) => setPays_depart(e.target.value)}
-            />
+            <div className="flag-select">
+              <select
+                id="pays_depart"
+                value={pays_depart}
+                onChange={(e) => setPays_depart(e.target.value)}
+              >
+                <option value="">-- Sélectionner un pays --</option>
+                {countryOptions.map((country) => (
+                  <option key={country.name} value={country.name}>
+                    {country.name}
+                  </option>
+                ))}
+              </select>
+              {pays_depart && (
+                <img
+                  src={countryOptions.find((c) => c.name === pays_depart)?.flag}
+                  alt={pays_depart}
+                  className="flag-icon"
+                />
+              )}
+            </div>
           </div>
+
           <div className="form-group">
             <label htmlFor="ville_depart">Ville de départ</label>
             <input
@@ -91,6 +119,7 @@ const Create = () => {
               onChange={(e) => setVille_depart(e.target.value)}
             />
           </div>
+
           <div className="form-group">
             <label htmlFor="adresse_depart">Adresse de départ</label>
             <input
@@ -101,16 +130,35 @@ const Create = () => {
               onChange={(e) => setAdresse_depart(e.target.value)}
             />
           </div>
+
           <div className="form-group">
             <label htmlFor="pays_destination">Pays d'arrivée</label>
-            <input
-              id="pays_destination"
-              type="text"
-              placeholder="Pays d'arrivée"
-              value={pays_destination}
-              onChange={(e) => setPays_destination(e.target.value)}
-            />
+            <div className="flag-select">
+              <select
+                id="pays_destination"
+                value={pays_destination}
+                onChange={(e) => setPays_destination(e.target.value)}
+              >
+                <option value="">-- Sélectionner un pays --</option>
+                {countryOptions.map((country) => (
+                  <option key={country.name} value={country.name}>
+                    {country.name}
+                  </option>
+                ))}
+              </select>
+              {pays_destination && (
+                <img
+                  src={
+                    countryOptions.find((c) => c.name === pays_destination)
+                      ?.flag
+                  }
+                  alt={pays_destination}
+                  className="flag-icon"
+                />
+              )}
+            </div>
           </div>
+
           <div className="form-group">
             <label htmlFor="ville_destination">Ville d'arrivée</label>
             <input
@@ -121,6 +169,7 @@ const Create = () => {
               onChange={(e) => setVille_destination(e.target.value)}
             />
           </div>
+
           <div className="form-group">
             <label htmlFor="adresse_destination">Adresse d'arrivée</label>
             <input
@@ -131,6 +180,7 @@ const Create = () => {
               onChange={(e) => setAdresse_destination(e.target.value)}
             />
           </div>
+
           <div className="form-group">
             <label htmlFor="capacite">Capacité</label>
             <input
@@ -141,6 +191,7 @@ const Create = () => {
               onChange={(e) => setCapacite(e.target.value)}
             />
           </div>
+
           <div className="form-group">
             <label htmlFor="date_depart">Date de départ</label>
             <input
@@ -151,6 +202,7 @@ const Create = () => {
               onChange={(e) => setDate_depart(e.target.value)}
             />
           </div>
+
           <div className="form-group">
             <label htmlFor="date_arrive">Date d'arrivée</label>
             <input
@@ -161,6 +213,7 @@ const Create = () => {
               onChange={(e) => setDate_arrive(e.target.value)}
             />
           </div>
+
           <div className="form-group">
             <label htmlFor="prix_kilo">Prix par kilo</label>
             <input
@@ -171,6 +224,7 @@ const Create = () => {
               onChange={(e) => setPrix_kilo(e.target.value)}
             />
           </div>
+
           <button type="submit">Créer</button>
         </form>
       </div>
