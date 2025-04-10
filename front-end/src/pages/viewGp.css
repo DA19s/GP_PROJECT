@@ -23,6 +23,7 @@ body {
 
 /* Titre */
 .gp-title {
+  margin-top: 44px;
   color: white;
   font-size: 24px;
   margin-bottom: 20px;
